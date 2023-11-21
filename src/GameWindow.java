@@ -42,7 +42,6 @@ public class GameWindow extends JFrame {
     public GameWindow(){}
 
     //TODO
-
     /*
     Saknas funktion för att rätta ett svar och få tillbaka informationen från servern, och sätta
     knappen färg beroende på om svaret är rätt eller fel.
@@ -215,9 +214,9 @@ public class GameWindow extends JFrame {
 
     public static void main(String[] args) {
         GameWindow gameWindow = new GameWindow();
-        //gameWindow.drawStartScreen();
+        gameWindow.drawStartScreen();
         //gameWindow.drawCategoryScreen();
         //gameWindow.drawWaitingForOpponentScreen();
-        gameWindow.drawResultScreen();
+        //gameWindow.drawResultScreen();
     }
 }
