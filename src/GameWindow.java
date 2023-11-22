@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 
 public class GameWindow extends JFrame {
+    //test
     //startScreen
     JPanel startScreenPanel = new JPanel();
     JLabel waitingForOpponentLabel = new JLabel("Väntar på att en motståndare ska koppla upp sig...");
