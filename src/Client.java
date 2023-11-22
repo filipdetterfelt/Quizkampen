@@ -3,7 +3,7 @@ import java.net.Socket;
 
 public class Client {
     public Client(){
-        try(Socket socket = new Socket("127.0.0.1",11223); //Socket med ip o portnr
+        try(Socket socket = new Socket("127.0.0.1",11224); //Socket med ip o portnr
         PrintWriter out = new PrintWriter(socket.getOutputStream(),true); //Printwriter skriva
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //Kunna läsa
         BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in)); //Läsa från användare

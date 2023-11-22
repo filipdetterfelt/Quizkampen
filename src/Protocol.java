@@ -22,7 +22,7 @@ public class Protocol {
         } else if (state == QUESTION) {
             // här ska man svara på en fråga
             if (input == 0) { // om frågan är besvarad
-                if (correctanswer) { // metod eller nåt som kollar om det var rätt svar?
+                if (true) { // metod eller nåt som kollar om det var rätt svar?
                     player.setPointsPerGame(player.getPointsPerGame() + 1);
                 }
                 state = ANSWER;
