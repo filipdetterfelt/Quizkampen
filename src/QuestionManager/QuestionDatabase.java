@@ -104,5 +104,17 @@ public class QuestionDatabase
         return tempQuestionList;
     }
 
+    public List<String> getCategories() {
+
+        List<String> listOfCategories = new ArrayList<>();
+        for (Map.Entry<String, List<Question>> category : categories.entrySet())
+        {
+            listOfCategories.add(category.getKey());
+        }
+
+        return listOfCategories;
+
+    }
+
 
 }
