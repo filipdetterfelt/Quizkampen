@@ -65,7 +65,8 @@ public class Protocol {
 
         } else if (state == RESULT) { // här kommer totalen upp med vem som vann omgången
             if (inputCategories != 0) {// om vi ska ha en ny kategori så går vi tillbaka till start
-                if (bothPlayerHasPlayed) { // metod för att kolla om båda spelare har gjort färdigt omgången
+                //bothPlayerHasPlayed
+                if (true) { // metod för att kolla om båda spelare har gjort färdigt omgången
                     player.listOfPoints.add(round, player.getPointsPerGame()); // sparar resultatet i en lista i playerklassen
                     round++;
                     player.setTotalPoints(player.getTotalPoints() + player.getPointsPerGame()); // sparar poängen till totalen
