@@ -1,7 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
     private String name;
-    private int pointsPerGame;
-    private int totalPoints;
+    private int pointsPerGame = 0;
+    private int totalPoints = 0;
+    protected List<Integer> listOfPoints = new ArrayList<>();
+
 
     public Player() {
     }
@@ -19,6 +24,7 @@ public class Player {
     public void setTotalPoints(int totalPoints) {
         this.totalPoints = totalPoints;
     }
+
     public String getName() {
         return name;
     }
@@ -34,4 +40,17 @@ public class Player {
     public void setPointsPerGame(int pointsPerGame) {
         this.pointsPerGame = pointsPerGame;
     }
+
+    public StringBuilder showListOfPoints(List <Integer> listOfPoints){ // skriver ut listan med poäng efter varje omgång
+        StringBuilder sb = new StringBuilder(name + "\n");
+        int round = 1;
+        for (Integer i : listOfPoints) {
+            String message = "Runda " + round + ", " + i + " poäng\n";
+            sb.append(message);
+            round++;
+        }
+        return sb;
+    }
+
 }
+
