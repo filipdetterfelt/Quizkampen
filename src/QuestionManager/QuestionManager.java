@@ -33,8 +33,6 @@ public class QuestionManager
         {
             System.out.println(question.getQuestion());
         }
-
-
     }
 
 
