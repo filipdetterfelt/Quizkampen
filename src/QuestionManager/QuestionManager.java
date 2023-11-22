@@ -1,13 +1,9 @@
 package QuestionManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class QuestionManager
 {
-    private HashMap<String, List<Question>> categories;
 
     public QuestionManager() {
         this.init();
@@ -34,6 +30,14 @@ public class QuestionManager
             System.out.println(question.getQuestion());
         }
 
+
+    }
+
+    public List<String> getCategories() {
+
+        QuestionDatabase qdb = new QuestionDatabase();
+
+        return qdb.getCategories();
 
     }
 
