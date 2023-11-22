@@ -25,5 +25,17 @@ public class QuestionManager
         return qdb.getQuestions(category, amount);
     }
 
+    public static void main(String[] args) {
+        QuestionDatabase qdb = new QuestionDatabase();
+        List<Question> listOfQuestions = qdb.getQuestions("geografi", 2);
+
+        for (Question question : listOfQuestions)
+        {
+            System.out.println(question.getQuestion());
+        }
+
+
+    }
+
 
 }
