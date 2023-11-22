@@ -48,7 +48,7 @@ public class Protocol {
             // metod för att visa fråga här
 
             if (input == 0) { // om frågan är besvarad
-                if (correctanswer) { // metod eller nåt som kollar om det var rätt svar?
+                if (true) { // metod eller nåt som kollar om det var rätt svar?
                     player.setPointsPerGame(player.getPointsPerGame() + 1);
                 }
                 inputQuestions--; // räknar ner frågorna

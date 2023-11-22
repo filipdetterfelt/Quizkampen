@@ -3,9 +3,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerListener {
+    //TODO
+    //Bättre låta 2 spelare ansluta så kan de splea mot varandra
+    //Starta upp fler trådar
     int clientCounter =1;
     public ServerListener(){
-        try(ServerSocket serverSocket = new ServerSocket(11223)) { //Serversokcet med rätt portnr
+        try(ServerSocket serverSocket = new ServerSocket(11224)) { //Serversokcet med rätt portnr
 
             while(true){
                 Socket socket = serverSocket.accept(); //skapar socket och kopplar på den till ssocket
