@@ -1,5 +1,9 @@
+import QuestionManager.Question;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
+
 
 public class GameWindow extends JFrame {
     //startScreen
@@ -39,6 +43,10 @@ public class GameWindow extends JFrame {
     JLabel opponentLabel = new JLabel("Motståndarens poäng:");
     JLabel opponentScoreLabel = new JLabel("0");
 
+    Question question = new Question();
+
+
+
     public GameWindow(){}
 
     //TODO
@@ -48,14 +56,6 @@ public class GameWindow extends JFrame {
 
     Saknar funktion för när en ny fråga ska laddas (från server), så ska knapparnas färg ställas tillbaka till null.
 
-     */
-
-    /*
-    Startskärm V
-    Gamestate 1 skärm, välja kategori V
-    Gamestate 2 skärm svara på frågor V
-    Gamestate 3 skärm, väntar på motståndaren V
-    Gamestate 4 skärm, visa resultat V
      */
 
     public void drawStartScreen(){
@@ -71,22 +71,23 @@ public class GameWindow extends JFrame {
         setResizable(false);
     }
 
-    public void drawCategoryScreen(){
+    public void drawCategoryScreen(String category1, String category2){
         add(categoryScreenPanel);
         categoryScreenPanel.add(categoryCenteringPanel);
         categoryCenteringPanel.add(categoryLabel);
         categoryScreenPanel.add(category1Btn);
         categoryScreenPanel.add(category2Btn);
 
+        //Ge knapparna varsin kategori
+        category1Btn.setText(category1);
+        category2Btn.setText(category2);
+
+        //Ritar upp frågeskärmen med den frågan som servern valt
         category1Btn.addActionListener(e -> {
-            System.out.println("Valde kategori 1");
-            drawQuestionsScreen();
-            remove(categoryScreenPanel);
+            System.out.println("Valde " + category1);
         });
         category2Btn.addActionListener(e -> {
-            System.out.println("Valde kategori 2");
-            drawQuestionsScreen();
-            remove(categoryScreenPanel);
+            System.out.println("Valde " + category2);
         });
 
         category1Btn.setFocusable(false);
@@ -101,7 +102,8 @@ public class GameWindow extends JFrame {
         setResizable(false);
     }
 
-    public void drawQuestionsScreen(){
+    public void drawQuestionsScreen(Question recievedQuestion){
+        resetBackgrounds();
         add(questionsScreenPanel);
         questionsScreenPanel.add(questionCenteringPanel);
         questionCenteringPanel.add(questionLabel);
@@ -111,49 +113,39 @@ public class GameWindow extends JFrame {
         questionsPanel.add(answer3Btn);
         questionsPanel.add(answer4Btn);
 
+        //Hämta & lagra svarets index från frågan
+        int correctAnswer = recievedQuestion.getCorrectOptionIndex();
+
+        //Hämta & sätt ut frågan och svarsalternativen från frågan
+        questionLabel.setText(recievedQuestion.getQuestion());
+        answer1Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(0));
+        answer2Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(1));
+        answer3Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(2));
+        answer4Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(3));
+
         answer1Btn.addActionListener(e -> {
             System.out.println(answer1Btn.getText());
-            /*
-            if (correctAnswer){
-                setBackground(Color.GREEN);
-            } else {
-                setBackground(Color.RED);
+            if (checkAnswer(0,correctAnswer,answer1Btn)){
+                System.out.println("Rätt svar!");
             }
-
-             */
         });
         answer2Btn.addActionListener(e -> {
             System.out.println(answer2Btn.getText());
-            /*
-            if (correctAnswer){
-                setBackground(Color.GREEN);
-            } else {
-                setBackground(Color.RED);
+            if (checkAnswer(1,correctAnswer,answer2Btn)){
+                System.out.println("Rätt svar!");
             }
-
-             */
         });
         answer3Btn.addActionListener(e -> {
             System.out.println(answer3Btn.getText());
-            /*
-            if (correctAnswer){
-                setBackground(Color.GREEN);
-            } else {
-                setBackground(Color.RED);
-            }
-
-             */
+            if (checkAnswer(2,correctAnswer, answer3Btn)){
+                System.out.println("Rätt svar!");
+                            }
         });
         answer4Btn.addActionListener(e -> {
             System.out.println(answer4Btn.getText());
-              /*
-            if (correctAnswer){
-                setBackground(Color.GREEN);
-            } else {
-                setBackground(Color.RED);
+            if (checkAnswer(3,correctAnswer, answer4Btn)){
+                System.out.println("Rätt svar!");
             }
-
-             */
         });
 
         questionsScreenPanel.setBorder(BorderFactory.createEmptyBorder(40,20,20,20));
@@ -191,7 +183,7 @@ public class GameWindow extends JFrame {
         setResizable(false);
     }
 
-    public void drawResultScreen(){
+    public void drawResultScreen(int playerPoints, int opponentPoints){
         add(scorePanel);
         scorePanel.add(playerCenterPanel);
         playerCenterPanel.add(playerScorePanel);
@@ -212,12 +204,37 @@ public class GameWindow extends JFrame {
         setResizable(false);
     }
 
+    //Jämför knappens index mot det korrekta svarets index i frågan
+    private boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
+        if (answeredIndex == correctIndex){
+            button.setBackground(Color.GREEN);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void resetBackgrounds(){
+        answer1Btn.setBackground(null);
+        answer2Btn.setBackground(null);
+        answer3Btn.setBackground(null);
+        answer4Btn.setBackground(null);
+    }
+
     public static void main(String[] args) {
         GameWindow gameWindow = new GameWindow();
-        gameWindow.drawStartScreen();
-        //gameWindow.drawCategoryScreen();
+        Question testQuestion = new Question("Vilket år inträffade den franska revolutionen?", new String[]{"1789", "1815", "1871", "1799"}, 0);
+        //QuestionDatabase database = new QuestionDatabase();
+        String testCategory1 = "Historia";
+        String testCategory2 = "Sport";
+
+        //gameWindow.drawStartScreen();
+        //gameWindow.drawCategoryScreen(testCategory1, testCategory2);
         //gameWindow.drawWaitingForOpponentScreen();
         //gameWindow.drawResultScreen();
+
+        gameWindow.drawQuestionsScreen(testQuestion);
+
     }
 
 }

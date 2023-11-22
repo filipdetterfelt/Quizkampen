@@ -12,4 +12,20 @@ public class Question
         this.options = options;
         this.correctOptionIndex = correctOptionIndex;
     }
+
+    public Question() {
+    }
+
+    public String[] getOptions() {
+        return options;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public int getCorrectOptionIndex() {
+        return correctOptionIndex;
+    }
+
 }
