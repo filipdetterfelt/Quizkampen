@@ -1,3 +1,5 @@
+import QuestionManager.QuestionManager;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -9,6 +11,10 @@ public class Client {
         BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in)); //Läsa från användare
 
         ){
+
+            GameWindow g = new GameWindow();
+            QuestionManager qm = new QuestionManager();
+            g.drawCategoryScreen();
             //2 strings
             String serverListener="";
             String userListener="";
