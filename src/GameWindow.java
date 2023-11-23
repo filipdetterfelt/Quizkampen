@@ -66,6 +66,9 @@ public class GameWindow extends JFrame {
     }
 
     public void drawCategoryScreen(String category1, String category2){
+
+        AtomicReference<String> mess = null;
+        startScreenPanel.setVisible(false);
         add(categoryScreenPanel);
         categoryScreenPanel.add(categoryCenteringPanel);
         categoryCenteringPanel.add(categoryLabel);
@@ -78,11 +81,8 @@ public class GameWindow extends JFrame {
 
         //Ritar upp frågeskärmen med den frågan som servern valt
         category1Btn.addActionListener(e -> {
-            while(category1.equals(category1Btn)){//TEST
-                drawQuestionsScreen(question);//TEST
-            }
             System.out.println(category1);
-            userInput = category1;
+            //mess.set(category1);
         });
         category2Btn.addActionListener(e -> {
             System.out.println(category2);
@@ -125,24 +125,28 @@ public class GameWindow extends JFrame {
             System.out.println(answer1Btn.getText());
             if (checkAnswer(0,correctAnswer,answer1Btn)){
                 System.out.println("Rätt svar!");
+                correctAnswerBool.set(true);
             }
         });
         answer2Btn.addActionListener(e -> {
             System.out.println(answer2Btn.getText());
             if (checkAnswer(1,correctAnswer,answer2Btn)){
                 System.out.println("Rätt svar!");
+                correctAnswerBool.set(true);
             }
         });
         answer3Btn.addActionListener(e -> {
             System.out.println(answer3Btn.getText());
             if (checkAnswer(2,correctAnswer, answer3Btn)){
                 System.out.println("Rätt svar!");
-                            }
+                correctAnswerBool.set(true);
+            }
         });
         answer4Btn.addActionListener(e -> {
             System.out.println(answer4Btn.getText());
             if (checkAnswer(3,correctAnswer, answer4Btn)){
                 System.out.println("Rätt svar!");
+                correctAnswerBool.set(true);
             }
         });
 
@@ -154,6 +158,7 @@ public class GameWindow extends JFrame {
         setVisible(true);
         setResizable(false);
 
+        return correctAnswerBool.get();
     }
 
     public void drawWaitingForOpponentScreen(){
@@ -203,7 +208,7 @@ public class GameWindow extends JFrame {
     }
 
     //Jämför knappens index mot det korrekta svarets index i frågan
-    private boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
+    public boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
         if (answeredIndex == correctIndex){
             button.setBackground(Color.GREEN);
             return true;

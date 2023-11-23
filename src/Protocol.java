@@ -1,3 +1,5 @@
+
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,9 +31,9 @@ public class Protocol {
     Player player = new Player();
     int inputQuestions = Integer.parseInt(p.getProperty("questions"));
     int inputCategories = Integer.parseInt(p.getProperty("categories"));
-    ServerListener s = new ServerListener(); // serverListener så vi kan se om det är två spelare anslutna
+    //ServerListener s = new ServerListener(); // serverListener så vi kan se om det är två spelare anslutna
 
-
+    /*
     public String gameProtocol(int input) {
         // input är en int som berättar hur många frågor vi har kvar
         int round = 0;
@@ -88,5 +90,7 @@ public class Protocol {
         }
         return returnString;
     }
+
+     */
 }
 

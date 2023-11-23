@@ -1,78 +1,82 @@
-import java.io.*;
+import QuestionManager.QuestionDatabase;
+import QuestionManager.Question;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Client {
 
-    String userInput;
+    private static int PORT = 55555;
 
-    public Client(){
-        try(Socket socket = new Socket("127.0.0.1",11224); //Socket med ip o portnr
-        PrintWriter out = new PrintWriter(socket.getOutputStream(),true); //Printwriter skriva
+
+
+
+    public Client(String serverAdress) throws ClassNotFoundException {
+        GameWindow g = new GameWindow();
+        try(
+        Socket socket = new Socket(serverAdress,PORT);
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        //BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //Kunna läsa
-        //BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in)); //Läsa från användare
-        //ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());)
+        {
+            g.drawStartScreen();
 
-        ){
+            Object tempObject;
+            String tempString;
+            List<String> tempList = new ArrayList<>();
+            String cat1 = null, cat2 = null;
 
-            GameWindow g = new GameWindow(userInput);
+            while ((tempObject = in.readObject()) != null) {
+                System.out.println("I while");
+                if (tempObject instanceof List<?>){
+                    tempList.add((String) ((List<?>) tempObject).get(0));
+                    tempList.add((String) ((List<?>) tempObject).get(1));
+                    cat1 = tempList.get(0);
+                    cat2 = tempList.get(1);
+                    System.out.println(cat1 + cat2);
 
-            Object input;
-            List<String> templist = new ArrayList<>();
+                    g.drawCategoryScreen(cat1,cat2);
 
-            while ((input = in.readObject()) != null){
-                System.out.println("inne i loopen");
-                if (input instanceof List<?>){
-                    templist.add((String) ((List<?>) input).get(0));
-                    templist.add((String) ((List<?>) input).get(1));
+                    g.category1Btn.addActionListener(e -> {
+                        String temp = g.category1Btn.getText();
+                        try {
+                            out.writeObject(temp);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
+                    g.category2Btn.addActionListener(e -> {
+                        String temp = g.category2Btn.getText();
+                        try {
+                            out.writeObject(temp);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
+                } else if (tempObject instanceof Question) {
+                    boolean answer = (g.drawQuestionsScreen((Question) tempObject));
+                    System.out.println(answer);
+
                 }
-            }
-            String cat1 = templist.get(0);
-            String cat2 = templist.get(1);
-            System.out.println(cat1);
-            System.out.println(cat2);
-
-            //g.drawCategoryScreen(cat1,cat2);
-            g.category1Btn.addActionListener(e -> {
-                System.out.println("Test " + g.category1Btn.getText());
-                userInput = g.category1Btn.getText();
-                out.println(userInput);
-                userInput = null;
-            });
-            g.category2Btn.addActionListener(e -> {
-                System.out.println("Test " + g.category2Btn.getText());
-                userInput = g.category2Btn.getText();
-                out.println(userInput);
-                userInput = null;
-            });
-
-            //2 strings
-            String serverListener="";
-            String userListener="";
-
-            serverListener = in.readLine(); //Serverlistener läser från in
-            System.out.println(serverListener); //Skriver ut
-
-            while(g.userInput != null){ //Loop om den inte är null
-                out.println(g.userInput); //Skriver de användaren skrev
-                System.out.println("Sent to Server: "+userListener); //Skriver ut de användaren skrev
-
-                serverListener = in.readLine(); //Läser från serverlistener
-                System.out.println(serverListener); //Skriver ut det som finns i serverListener
-
 
             }
-        }
-        catch (IOException e){ //Felhantering
-            e.printStackTrace(); //Skriver ut stack trace vid fel
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
+
+
+        } catch (EOFException e){
+
+            System.out.println("Slutet av filen");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 
-    public static void main(String[] args) {Client c = new Client();} //Anropar Client med hjälp av c
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        Client client = new Client("127.0.0.1");
+    }
 }

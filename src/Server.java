@@ -1,51 +1,65 @@
 import QuestionManager.QuestionManager;
+import QuestionManager.QuestionDatabase;
+import QuestionManager.Question;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server extends Thread{ //Ärver från Thread klassen
-    private Socket socket; //Skapar upp socket
-   // QuestionDatabase q = new QuestionDatabase(); //Skapar upp instans av questiondatabse
-    public Server(Socket socket) { //Konstruktor med socket som inparameter är de in eller ut i paranttes?
+public class Server extends Thread{
+    Socket socket;
+    Player p1;
+    Player p2;
+    Player currentPlayer;
+
+    public Server(Player p1, Player p2){
+        this.p1 = p1;
+        this.p2 = p2;
+        this.currentPlayer = p1;
+    }
+
+    public Server(Socket socket) {
         this.socket = socket;
     }
-    @Override //Overridar run metoden
+
     public void run(){
+        System.out.println("Server is running");
+        QuestionDatabase qdb = new QuestionDatabase();
         QuestionManager qm = new QuestionManager();
-
         List<String> listOfCategories = qm.getCategories();
-        try( //I try blocket lägger jag in de som kan gå snett
-             ObjectOutputStream objectWriter = new ObjectOutputStream(socket.getOutputStream());
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(),true); //writer me autoflush
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));//Reader
-             ObjectInputStream objectReader = new ObjectInputStream(socket.getInputStream());
 
-        ){
+        try(
+            ObjectOutputStream p1Out = new ObjectOutputStream(p1.sock.getOutputStream());
+            ObjectInputStream p1In = new ObjectInputStream(p1.sock.getInputStream());
+            ObjectOutputStream p2Out = new ObjectOutputStream(p2.sock.getOutputStream());
+            ObjectInputStream p2In = new ObjectInputStream(p2.sock.getInputStream())) {
 
-            objectWriter.writeObject(listOfCategories);
+            p1Out.writeObject(listOfCategories);
 
+            Object tempObject;
+            String tempString;
+            List<Question> tempQuestions = new ArrayList<>();
 
-            //writer.println("Vilket Språk talar man i Finland: ");
-
-            String clientConnect =""; //String
-            String clientConnect2= "";
-            String temp;
-
-            //TODO
-            //Kolla while loopen
-            //Gör 2 läsningar
-            while((temp = reader.readLine()) != null){ //Loop sålänge den inte r null
-                writer.println("Klienten valde: " + temp);
+            while ((tempObject = p1In.readObject()) != null){
+                if (tempObject instanceof String){
+                    tempString = (String) tempObject;
+                    System.out.println(tempString);
+                    tempQuestions = qm.getQuestions(tempString,1);
+                    p1Out.writeObject(tempQuestions.get(0));
+                }
             }
-
         }
-        catch (IOException e){ //Felhantering
+        catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
+
     }
 
-    //public static void main(String[] args) {Server s = new Server();}
+
+
 }
