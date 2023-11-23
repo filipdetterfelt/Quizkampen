@@ -45,9 +45,21 @@ public class GameWindow extends JFrame {
     JLabel opponentLabel = new JLabel("Motståndarens poäng:");
     JLabel opponentScoreLabel = new JLabel("0");
     Question question = new Question();
+    public int tempScore = 0;
+    boolean correctAnswerBool;
+
+    public int getTempScore() {
+        return tempScore;
+    }
+
+    public void setTempScore(int tempScore) {
+        this.tempScore = tempScore;
+    }
+
     String userInput = null;
     public GameWindow(String userInput){this.userInput = userInput;}
     public GameWindow(){}
+
 
     //TODO
     /*
@@ -70,7 +82,8 @@ public class GameWindow extends JFrame {
     public void drawCategoryScreen(String category1, String category2){
 
         AtomicReference<String> mess = null;
-        startScreenPanel.setVisible(false);
+        clearFrame(startScreenPanel);
+
         add(categoryScreenPanel);
         categoryScreenPanel.add(categoryCenteringPanel);
         categoryCenteringPanel.add(categoryLabel);
@@ -81,7 +94,8 @@ public class GameWindow extends JFrame {
         category1Btn.setText(category1);
         category2Btn.setText(category2);
 
-        //Ritar upp frågeskärmen med den frågan som servern valt
+        //Ritar upp frågeskä
+        // rmen med den frågan som servern valt
         category1Btn.addActionListener(e -> {
             System.out.println(category1);
             //mess.set(category1);
@@ -106,9 +120,9 @@ public class GameWindow extends JFrame {
 
     }
 
-    public boolean drawQuestionsScreen(Question recievedQuestion){
-        AtomicBoolean correctAnswerBool = new AtomicBoolean(false);
-        categoryScreenPanel.setVisible(false);
+    public void drawQuestionsScreen(Question recievedQuestion){
+
+        clearFrame(categoryScreenPanel);
         resetBackgrounds();
         add(questionsScreenPanel);
         questionsScreenPanel.add(questionCenteringPanel);
@@ -133,28 +147,26 @@ public class GameWindow extends JFrame {
             System.out.println(answer1Btn.getText());
             if (checkAnswer(0,correctAnswer,answer1Btn)){
                 System.out.println("Rätt svar!");
-                correctAnswerBool.set(true);
+                correctAnswerBool = true;
+                setTempScore(1);
             }
         });
         answer2Btn.addActionListener(e -> {
             System.out.println(answer2Btn.getText());
             if (checkAnswer(1,correctAnswer,answer2Btn)){
                 System.out.println("Rätt svar!");
-                correctAnswerBool.set(true);
             }
         });
         answer3Btn.addActionListener(e -> {
             System.out.println(answer3Btn.getText());
             if (checkAnswer(2,correctAnswer, answer3Btn)){
                 System.out.println("Rätt svar!");
-                correctAnswerBool.set(true);
             }
         });
         answer4Btn.addActionListener(e -> {
             System.out.println(answer4Btn.getText());
             if (checkAnswer(3,correctAnswer, answer4Btn)){
                 System.out.println("Rätt svar!");
-                correctAnswerBool.set(true);
             }
         });
 
@@ -166,10 +178,10 @@ public class GameWindow extends JFrame {
         setVisible(true);
         setResizable(false);
 
-        return correctAnswerBool.get();
     }
 
-    public void drawWaitingForOpponentScreen(){
+    public void drawWaitingForOpponentScreen(int tempInt){
+        clearFrame(questionsScreenPanel);
 
         add(waitingForOpponentPanel);
         waitingForOpponentPanel.add(scorePanel);
@@ -184,7 +196,7 @@ public class GameWindow extends JFrame {
         opponentScorePanel.add(opponentLabel);
         opponentScorePanel.add(opponentScoreLabel);
 
-
+        playerScoreLabel.setText(String.valueOf(tempInt));
 
         setTitle("Quizkampen");
         setSize(400,600);
@@ -231,6 +243,9 @@ public class GameWindow extends JFrame {
         answer3Btn.setBackground(null);
         answer4Btn.setBackground(null);
     }
+    private void clearFrame(JPanel panel){
+        this.remove(panel);
+    }
 
     public static void main(String[] args) {
         GameWindow gameWindow = new GameWindow();
@@ -241,10 +256,10 @@ public class GameWindow extends JFrame {
 
         //gameWindow.drawStartScreen();
         //gameWindow.drawCategoryScreen(testCategory1, testCategory2);
-        //gameWindow.drawWaitingForOpponentScreen();
+        //gameWindow.drawWaitingForOpponentScreen(5);
         //gameWindow.drawResultScreen();
 
-        gameWindow.drawQuestionsScreen(testQuestion);
+        //gameWindow.drawQuestionsScreen(testQuestion);
 
     }
 

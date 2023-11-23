@@ -51,7 +51,20 @@ public class Server extends Thread{
                     System.out.println(tempString);
                     tempQuestions = qm.getQuestions(tempString,1);
                     p1Out.writeObject(tempQuestions.get(0));
+                } else if (tempObject instanceof Integer) {
+                    int tempPoint = (Integer) tempObject;
+                    if (tempPoint == 1){
+                        System.out.println("Klienten svarade rätt");
+                        p1.addPoints(tempPoint);
+                        System.out.println("Player 1 points: " + p1.getTotalPoints());
+                    } else {
+                        System.out.println("Klienten svarade fel");
+                        System.out.println("Player 1 points: " + p1.getTotalPoints());
+
+                    }
+                    p1Out.writeObject(p1.getTotalPoints());
                 }
+
             }
         }
         catch (IOException | ClassNotFoundException e){
