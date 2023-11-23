@@ -11,41 +11,25 @@ public class Server extends Thread{ //Ärver från Thread klassen
     @Override //Overridar run metoden
     public void run(){
         try( //I try blocket lägger jag in de som kan gå snett
+             ObjectOutputStream objectWriter = new ObjectOutputStream(socket.getOutputStream());
             PrintWriter writer = new PrintWriter(socket.getOutputStream(),true); //writer me autoflush
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));//Reader
         ){
 
-            writer.println("Vilket Språk talar man i Sverige: ");//Skriver ut meddealnde
+            objectWriter.writeObject(listOfCategories);
 
 
-
-            writer.println("Vilket Språk talar man i Finland: ");
+            //writer.println("Vilket Språk talar man i Finland: ");
 
             String clientConnect =""; //String
             String clientConnect2= "";
+            String temp;
 
             //TODO
             //Kolla while loopen
             //Gör 2 läsningar
-            while((clientConnect = reader.readLine()) != null){ //Loop sålänge den inte r null
-                String questionAnswer= clientConnect.trim(); //String som får clientCOnnect och sen trim
-                String questionAnswer2 =clientConnect2.trim();
-                if(questionAnswer.equalsIgnoreCase("SVENSKA")){
-                    writer.println("Du svarade rätt"); //Skriver de som finns i clientConnect
-
-                }
-                else writer.println("Du svarade fel");
-
-
-                if(questionAnswer2.equalsIgnoreCase("FINSKA")){
-                    writer.println("Du svarade rätt"); //Skriver de som finns i clientConnect
-
-                }
-                else writer.println("Du svarade fel");
-
-
-
-
+            while((temp = reader.readLine()) != null){ //Loop sålänge den inte r null
+                writer.println("Klienten valde: " + temp);
             }
 
         }

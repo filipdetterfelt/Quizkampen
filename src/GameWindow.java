@@ -1,5 +1,4 @@
 import QuestionManager.Question;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -43,20 +42,14 @@ public class GameWindow extends JFrame {
     JLabel playerScoreLabel = new JLabel("2");
     JLabel opponentLabel = new JLabel("Motståndarens poäng:");
     JLabel opponentScoreLabel = new JLabel("0");
-
     Question question = new Question();
-
-
-
+    String userInput = null;
+    public GameWindow(String userInput){this.userInput = userInput;}
     public GameWindow(){}
 
     //TODO
     /*
-    Saknas funktion för att rätta ett svar och få tillbaka informationen från servern, och sätta
-    knappen färg beroende på om svaret är rätt eller fel.
-
-    Saknar funktion för när en ny fråga ska laddas (från server), så ska knapparnas färg ställas tillbaka till null.
-
+    Saknas funktion för att rätta ett svar och få tillbaka informationen från servern.
      */
 
     public void drawStartScreen(){
@@ -85,10 +78,14 @@ public class GameWindow extends JFrame {
 
         //Ritar upp frågeskärmen med den frågan som servern valt
         category1Btn.addActionListener(e -> {
-            System.out.println("Valde " + category1);
+            while(category1.equals(category1Btn)){//TEST
+                drawQuestionsScreen(question);//TEST
+            }
+            System.out.println(category1);
+            userInput = category1;
         });
         category2Btn.addActionListener(e -> {
-            System.out.println("Valde " + category2);
+            System.out.println(category2);
         });
 
         category1Btn.setFocusable(false);
@@ -238,4 +235,7 @@ public class GameWindow extends JFrame {
 
     }
 
+    public String getUserInput() {
+        return userInput;
+    }
 }
