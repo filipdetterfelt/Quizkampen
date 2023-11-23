@@ -1,3 +1,4 @@
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,6 +7,12 @@ public class Player {
     private int pointsPerGame = 0;
     private int totalPoints = 0;
     protected List<Integer> listOfPoints = new ArrayList<>();
+    Socket sock;
+
+    public Player(Socket sock, String name){
+        this.sock = sock;
+        this.name = name;
+    }
 
 
     public Player() {

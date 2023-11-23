@@ -2,6 +2,8 @@ import QuestionManager.Question;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class GameWindow extends JFrame {
@@ -86,6 +88,7 @@ public class GameWindow extends JFrame {
         });
         category2Btn.addActionListener(e -> {
             System.out.println(category2);
+            //mess = category2;
         });
 
         category1Btn.setFocusable(false);
@@ -98,9 +101,14 @@ public class GameWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
+
+       // return mess;
+
     }
 
-    public void drawQuestionsScreen(Question recievedQuestion){
+    public boolean drawQuestionsScreen(Question recievedQuestion){
+        AtomicBoolean correctAnswerBool = new AtomicBoolean(false);
+        categoryScreenPanel.setVisible(false);
         resetBackgrounds();
         add(questionsScreenPanel);
         questionsScreenPanel.add(questionCenteringPanel);
