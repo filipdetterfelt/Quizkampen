@@ -1,0 +1,23 @@
+Skicka och ta emot från client och server
+    * Skickat 2 kategorier V
+    * Rita upp screen med dessa två kategorier V
+    * Skicka tillbaka en vald kategori till servern
+    * Servern tar emot kategorin och skickar tillbaka fråga 1
+        *Lagrar den frågan temporärt som fråga 1
+    * Klienten ritar upp frågefönstret med den frågan
+    * Klienten skickar om det var rätt eller fel till servern
+    * Servern skickar nästa fråga
+        *Lagrar den frågan temporärt som fråga 2
+    * Klienten ritar upp frågefönstret med den frågan
+    * Klienten skickar om det var rätt eller fel till servern
+    * Servern skickar tillbaka gamestate WAIT och antal poäng klienten
+        fick under denna rond
+
+    * Servern skickar fråga 1 till Klient 2
+
+    Klient 2 har svarat på båda frågorna
+    * Serven skicka gamestate till båda med bådas poäng
+    * Servern skicka 2 nya kategorier till klient 2
+
+
+
