@@ -17,9 +17,37 @@ public class Client {
 
         ){
 
-            GameWindow g = new GameWindow();
-            QuestionManager qm = new QuestionManager();
-            g.drawCategoryScreen();
+            GameWindow g = new GameWindow(userInput);
+
+            Object input;
+            List<String> templist = new ArrayList<>();
+
+            while ((input = in.readObject()) != null){
+                System.out.println("inne i loopen");
+                if (input instanceof List<?>){
+                    templist.add((String) ((List<?>) input).get(0));
+                    templist.add((String) ((List<?>) input).get(1));
+                }
+            }
+            String cat1 = templist.get(0);
+            String cat2 = templist.get(1);
+            System.out.println(cat1);
+            System.out.println(cat2);
+
+            //g.drawCategoryScreen(cat1,cat2);
+            g.category1Btn.addActionListener(e -> {
+                System.out.println("Test " + g.category1Btn.getText());
+                userInput = g.category1Btn.getText();
+                out.println(userInput);
+                userInput = null;
+            });
+            g.category2Btn.addActionListener(e -> {
+                System.out.println("Test " + g.category2Btn.getText());
+                userInput = g.category2Btn.getText();
+                out.println(userInput);
+                userInput = null;
+            });
+
             //2 strings
             String serverListener="";
             String userListener="";
