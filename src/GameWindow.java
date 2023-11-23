@@ -256,7 +256,7 @@ public class GameWindow extends JFrame {
 
         //gameWindow.drawStartScreen();
         //gameWindow.drawCategoryScreen(testCategory1, testCategory2);
-        //gameWindow.drawWaitingForOpponentScreen(5);
+        gameWindow.drawWaitingForOpponentScreen(5);
         //gameWindow.drawResultScreen();
 
         //gameWindow.drawQuestionsScreen(testQuestion);
