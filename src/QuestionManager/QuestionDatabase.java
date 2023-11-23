@@ -112,7 +112,17 @@ public class QuestionDatabase
             listOfCategories.add(category.getKey());
         }
 
-        return listOfCategories;
+        Collections.shuffle(listOfCategories);
+
+        List<String> tempCategoriesList = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            tempCategoriesList.add(listOfCategories.get(i));
+        }
+
+
+
+        return tempCategoriesList;
 
     }
 
