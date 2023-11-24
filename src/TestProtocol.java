@@ -33,6 +33,7 @@ public class TestProtocol {
         List<String> tempList = new ArrayList<>();
 
         if (state == AWAITING_CLIENT_CONNECTION) {
+            System.out.println("state = AWAITING_CLIENT_CONNECTION");
             if (inObj instanceof Integer) {
                 if (inObj == (Integer) 2) {
                     state = PLAYER_ONE_CHOOSE_CATEGORY;
@@ -40,7 +41,7 @@ public class TestProtocol {
                 }
             }
         } else if (state == PLAYER_ONE_CHOOSE_CATEGORY) {
-            System.out.println("state == PLAYER_ONE_QUESTION");
+            System.out.println("state == PLAYER_ONE_CHOOSE_CATEGORY");
             if (inObj instanceof List<?>){
                 tempList.add((String) ((List<?>) inObj).get(0));
                 tempList.add((String) ((List<?>) inObj).get(1));
