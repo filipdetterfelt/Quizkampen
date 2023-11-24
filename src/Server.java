@@ -41,31 +41,49 @@ public class Server extends Thread{
             ObjectInputStream p2In = new ObjectInputStream(p2.sock.getInputStream())) {
 
             /*
-            Test utav protocolhanteringen
+            Test utav protocol hanteringen
             Kommentera bort för att testa enspelarläget
              */
-
 
             TestProtocol testProtocol = new TestProtocol();
             testProtocol.setClientCounter(2);
             testProtocol.process(2);
             p1Out.writeObject(testProtocol.process(listOfCategories));
-            Object inObj, outObj;
-
+            Object p1InObj, p2InObj = null, outObj;
 
             /*
             Test utav protocolhanteringen
              */
 
+            /*
+            loopen tar in ett object från klienten, och returnerar det till som protocol klassen processar
+             */
+
+
+            while ((p1InObj = p1In.readObject()) != null || (p2InObj = p2In.readObject()) != null){
+                try {
+                    p1Out.writeObject(testProtocol.process(p1InObj));
+                    p2Out.writeObject(testProtocol.process(p2InObj));
+                    }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+
+
+
+
+
+
             Object tempObject;
             String tempString;
             List<Question> tempQuestions = new ArrayList<>();
-            p1Out.writeObject(listOfCategories);
+            //p1Out.writeObject(listOfCategories);
 
 
 
             //Undo nedan kommentars block för att testa enspelar läget, och lägg till | ClassNotFoundException
-            /*
+/*
             while ((tempObject = p1In.readObject()) != null){
                 if (tempObject instanceof String){
                     tempString = (String) tempObject;
@@ -88,7 +106,9 @@ public class Server extends Thread{
 
             }
 
-             */
+ */
+
+
 
 
 
@@ -97,6 +117,8 @@ public class Server extends Thread{
         }
         catch (IOException e){
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }
