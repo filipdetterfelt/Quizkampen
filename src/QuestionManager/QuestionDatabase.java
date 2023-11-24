@@ -5,7 +5,7 @@ import java.util.*;
 public class QuestionDatabase
 {
 
-    private HashMap<String, List<Question>> categories;
+    private final HashMap<String, List<Question>> categories;
 
     public QuestionDatabase()
     {
@@ -224,7 +224,7 @@ public class QuestionDatabase
         return tempQuestionList;
     }
 
-    public List<String> getCategories() {
+    public List<String> getCategories(int amount) {
 
         List<String> listOfCategories = new ArrayList<>();
         for (Map.Entry<String, List<Question>> category : categories.entrySet())
@@ -236,7 +236,7 @@ public class QuestionDatabase
 
         List<String> tempCategoriesList = new ArrayList<>();
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < amount; i++) {
             tempCategoriesList.add(listOfCategories.get(i));
         }
 

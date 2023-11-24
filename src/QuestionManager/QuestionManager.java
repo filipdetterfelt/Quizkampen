@@ -43,7 +43,7 @@ public class QuestionManager
     {
         QuestionDatabase qdb = new QuestionDatabase();
 
-        return qdb.getCategories();
+        return qdb.getCategories(inputCategories);
     }
 
 
