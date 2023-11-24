@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,10 @@ public class Player {
         this.totalPoints = totalPoints;
     }
 
+
+    protected void addPoints(int points){
+        this.totalPoints = totalPoints + points;
+    }
     public int getTotalPoints() {
         return totalPoints;
     }
