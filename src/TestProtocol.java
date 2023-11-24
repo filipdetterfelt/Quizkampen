@@ -1,9 +1,12 @@
 import QuestionManager.Question;
 import QuestionManager.QuestionManager;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class TestProtocol {
 
@@ -22,6 +25,22 @@ public class TestProtocol {
 
     private int state = AWAITING_CLIENT_CONNECTION;
     private int clients;
+
+    Properties p = loadProperties();
+
+    public Properties loadProperties() {
+        Properties p = new Properties();
+        try {
+            p.load(new FileInputStream("src/MyProperties.properties"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return p;
+    }
+    int inputQuestions = Integer.parseInt(p.getProperty("questions"));
+    int inputCategories = Integer.parseInt(p.getProperty("categories"));
 
 
     Player player = new Player();
@@ -89,6 +108,35 @@ public class TestProtocol {
                 state = PLAYER_TWO_QUESTION;
                 questions = 1;
             }
+
+        } else if (state == PLAYER_TWO_QUESTION) {
+            System.out.println("state == PLAYER_TWO_QUESTION");
+
+            if (inputQuestions > questions ) {
+                if (inObj instanceof String) {
+                    tempString = (String) inObj;
+                    qList = qm.getQuestions(tempString);
+
+                } else if (inObj instanceof Integer) {
+                    tempInt = (Integer) inObj;
+                    if (tempInt == 1){
+                        System.out.println("Poäng: 1");
+                    } else if (tempInt == 0){
+                        System.out.println("Poäng: 0");
+                    }
+
+                    questions++;
+                    System.out.println("Questions " + questions);
+
+                }
+                System.out.println("Questions " + questions);
+                p2OutObj = qList.get(questions-1);
+
+            } else {
+                state = PLAYER_TWO_CHOOSE_CATEGORY;
+                questions = 1;
+            }
+
         }
         return p1OutObj;
     }
