@@ -1,10 +1,27 @@
 package QuestionManager;
 
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
 
 public class QuestionManager
 
 {
+    Properties p = loadProperties();
+    int inputQuestions = Integer.parseInt(p.getProperty("questions"));
+    int inputCategories = Integer.parseInt(p.getProperty("categories"));
+
+
+    public Properties loadProperties() {
+        Properties p = new Properties();
+        try {
+            p.load(new FileInputStream("src/MyProperties.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return p;
+    }
 
     public QuestionManager() {
         this.init();
@@ -15,29 +32,18 @@ public class QuestionManager
         //TODO: Logic for initializing QuestManager
     }
 
-    public List<Question> getQuestions(String category, int amount)
+    public List<Question> getQuestions(String category)
     {
         QuestionDatabase qdb = new QuestionDatabase();
 
-        return qdb.getQuestions(category, amount);
+        return qdb.getQuestions(category, inputQuestions);
     }
 
-    public static void main(String[] args) {
-        QuestionDatabase qdb = new QuestionDatabase();
-        List<Question> listOfQuestions = qdb.getQuestions("geografi", 2);
-
-        for (Question question : listOfQuestions)
-        {
-            System.out.println(question.getQuestion());
-        }
-    }
-
-    public List<String> getCategories() {
-
+    public List<String> getCategories()
+    {
         QuestionDatabase qdb = new QuestionDatabase();
 
         return qdb.getCategories();
-
     }
 
 
