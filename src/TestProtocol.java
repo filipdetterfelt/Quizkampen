@@ -1,4 +1,5 @@
 import QuestionManager.Question;
+import QuestionManager.QuestionManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,9 +29,18 @@ public class TestProtocol {
         System.out.println("Protocol initialized");
     }
 
+    List<Question> qList = new ArrayList<>();
+    int questions = 1;
     public Object process(Object inObj) {
-        Object outObj = null;
+        int categories = 0;
+        Object p1OutObj = null;
+        Object p2OutObj = null;
+
         List<String> tempList = new ArrayList<>();
+        String tempString;
+        int tempInt;
+
+        QuestionManager qm = new QuestionManager();
 
         if (state == AWAITING_CLIENT_CONNECTION) {
             System.out.println("state = AWAITING_CLIENT_CONNECTION");
@@ -42,13 +52,45 @@ public class TestProtocol {
             }
         } else if (state == PLAYER_ONE_CHOOSE_CATEGORY) {
             System.out.println("state == PLAYER_ONE_CHOOSE_CATEGORY");
-            if (inObj instanceof List<?>){
-                tempList.add((String) ((List<?>) inObj).get(0));
-                tempList.add((String) ((List<?>) inObj).get(1));
-                outObj = tempList;
+            if (categories < inputCategories) {
+                if (inObj instanceof List<?>) {
+                    tempList.add((String) ((List<?>) inObj).get(0));
+                    tempList.add((String) ((List<?>) inObj).get(1));
+                    p1OutObj = tempList;
+                }
+                categories++;
+                state = PLAYER_ONE_QUESTION;
+            }
+            else {
+                //player 2 pick category
+            }
+        } else if (state == PLAYER_ONE_QUESTION) {
+            System.out.println("state == PLAYER_ONE_QUESTION");
+
+            if (inputQuestions > questions ) {
+                if (inObj instanceof String) {
+                    tempString = (String) inObj;
+                    qList = qm.getQuestions(tempString);
+
+                } else if (inObj instanceof Integer) {
+                    tempInt = (Integer) inObj;
+                    if (tempInt == 1){
+                        System.out.println("Poäng: 1");
+                    } else if (tempInt == 0){
+                        System.out.println("Poäng: 0");
+                    }
+                    questions++;
+                }
+                System.out.println("Questions " + questions);
+                p1OutObj = qList.get(questions-1);
+
+            } else if (questions == inputQuestions) {
+                System.out.println("Setting state = PLAYER_TWO_QUESTION");
+                state = PLAYER_TWO_QUESTION;
+                questions = 1;
             }
         }
-        return outObj;
+        return p1OutObj;
     }
     public int getState() {
         return state;
