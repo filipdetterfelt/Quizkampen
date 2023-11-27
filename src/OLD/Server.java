@@ -1,8 +1,8 @@
-package OLD;
+/*package OLD;
 
-import Old2.QuestionManager.Question;
-import Old2.QuestionManager.QuestionDatabase;
-import Old2.QuestionManager.QuestionManager;
+import Old2.QuestionManagerOLD.Question;
+import Old2.QuestionManagerOLD.QuestionDatabase;
+import Old2.QuestionManagerOLD.QuestionManager;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -43,7 +43,7 @@ public class Server extends Thread{
             /*
             Test utav protocol hanteringen
             Kommentera bort för att testa enspelarläget
-             */
+
 
             TestProtocol testProtocol = new TestProtocol();
             testProtocol.setClientCounter(2);
@@ -53,11 +53,11 @@ public class Server extends Thread{
 
             /*
             Test utav protocolhanteringen
-             */
+
 
             /*
             loopen tar in ett object från klienten, och returnerar det till som protocol klassen processar
-             */
+
 
 
             while ((p1InObj = p1In.readObject()) != null || (p2InObj = p2In.readObject()) != null){
@@ -106,7 +106,7 @@ public class Server extends Thread{
 
             }
 
- */
+
 
 
 
@@ -125,4 +125,4 @@ public class Server extends Thread{
 
 
 
-}
+}*/

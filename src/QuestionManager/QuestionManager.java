@@ -1,4 +1,4 @@
-package Ny.QuestionManager;
+package QuestionManager;
 
 import java.io.FileInputStream;
 import java.io.IOException;

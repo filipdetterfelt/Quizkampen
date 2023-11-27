@@ -1,4 +1,4 @@
-package Old2.QuestionManager;
+/*package Old2.QuestionManagerOLD;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,4 +47,4 @@ public class QuestionManager
     }
 
 
-}
+}*/

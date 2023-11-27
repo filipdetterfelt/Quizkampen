@@ -1,6 +1,6 @@
-package Old2;
+/*package Old2;
 
-import Old2.QuestionManager.Question;
+import Old2.QuestionManagerOLD.Question;
 
 import java.io.*;
 import java.net.Socket;
@@ -57,7 +57,7 @@ public class Client {
                     g.drawQuestionsScreen(tempQ);
 
                     /* Action listener för svarsknapparna, skickar tillbaka en int beroende på om
-                       svaret är rätt eller fel. Rätt = 1, Fel = 0 */
+                       svaret är rätt eller fel. Rätt = 1, Fel = 0
                     g.answer1Btn.addActionListener(e -> {
                         if (g.checkAnswer(0,tempQ.getCorrectOptionIndex(),g.answer1Btn)){
                             try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
@@ -108,3 +108,4 @@ public class Client {
         Client client = new Client("127.0.0.1");
     }
 }
+*/

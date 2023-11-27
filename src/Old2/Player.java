@@ -1,4 +1,4 @@
-package Old2;
+/*package Old2;
 
 import java.io.Serializable;
 import java.net.Socket;
@@ -67,4 +67,4 @@ public class Player {
     }
 
 }
-
+*/
