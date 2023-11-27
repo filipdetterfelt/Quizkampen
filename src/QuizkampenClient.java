@@ -23,8 +23,8 @@ public class QuizkampenClient {
 
             socket = new Socket("localhost", PORT); // Replace "localhost" with the server address
 
-            in = new ObjectInputStream(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
 
         }
 
@@ -52,7 +52,7 @@ public class QuizkampenClient {
             List<String> tempList = new ArrayList<>();
             try {
                 response = in.readObject();
-                System.out.println("Klienen har mottagit: " + response);
+                System.out.println("Klienten har mottagit: " + response);
                 if (response instanceof String) {
                     String temp = (String) response;
                 }

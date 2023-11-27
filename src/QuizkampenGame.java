@@ -44,10 +44,8 @@ public class QuizkampenGame{
 
     public void run() {
         try {
-            playerOne.send("QuizkamenGame - run() -> Welcome " + playerOne.name);
-            playerOne.send("QuizkamenGame - run() -> Waiting for opponent to connect");
-            playerTwo.send("QuizkamenGame - run() -> Welcome " + playerTwo.name);
-            playerTwo.send("QuizkamenGame - run() -> "  + playerOne.name + " and " + playerTwo.name + " are connected");
+            playerOne.send("QuizkampenGame - run() -> "  + playerOne.name + " and " + playerTwo.name + " are connected");
+            playerTwo.send("QuizkampenGame - run() -> "  + playerTwo.name + " and " + playerOne.name + " are connected");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
