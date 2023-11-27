@@ -21,7 +21,8 @@ public class QuizkampenClient {
         public QuizkampenClient(String serverAddress) throws Exception {
 
 
-            socket = new Socket(serverAddress, PORT);
+            socket = new Socket("localhost", PORT); // Replace "localhost" with the server address
+
             in = new ObjectInputStream(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
 
