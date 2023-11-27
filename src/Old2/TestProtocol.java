@@ -1,5 +1,7 @@
-import QuestionManager.Question;
-import QuestionManager.QuestionManager;
+package Old2;
+
+import Old2.QuestionManager.Question;
+import Old2.QuestionManager.QuestionManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

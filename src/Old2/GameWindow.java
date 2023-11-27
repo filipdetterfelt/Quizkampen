@@ -1,8 +1,9 @@
-import QuestionManager.Question;
+package Old2;
+
+import Old2.QuestionManager.Question;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 

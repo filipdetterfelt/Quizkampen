@@ -1,4 +1,4 @@
-package QuestionManager;
+package Ny.QuestionManager;
 
 import java.util.*;
 
