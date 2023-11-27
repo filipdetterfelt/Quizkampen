@@ -7,15 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Client {
+    Socket socket;
+    ObjectOutputStream out;
+    ObjectInputStream in;
+    private static int PORT = 55557;
 
-    private static int PORT = 55555;
-
-    public Client(String serverAdress) throws ClassNotFoundException {
+    public Client(String serverAdress) throws ClassNotFoundException, IOException {
         GameWindow g = new GameWindow();
-        try(
-        Socket socket = new Socket(serverAdress,PORT);
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());)
+        socket = new Socket(serverAdress,PORT);
+        in = new ObjectInputStream(socket.getInputStream());
+        out = new ObjectOutputStream(socket.getOutputStream());
+        try
+
         {
             g.drawStartScreen();
 
@@ -67,7 +70,8 @@ public class Client {
                     g.answer3Btn.addActionListener(e -> {
                         if (g.checkAnswer(2,tempQ.getCorrectOptionIndex(),g.answer3Btn)){
                             try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                        } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+               //skriv ut
+                            } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
 
                     });
                     g.answer4Btn.addActionListener(e -> {
@@ -93,6 +97,7 @@ public class Client {
             }
         } catch (EOFException e){
             System.out.println("Slutet av filen");
+            e.printStackTrace();
         } catch (IOException e){
             e.printStackTrace();
         }

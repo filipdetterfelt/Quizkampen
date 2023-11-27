@@ -245,6 +245,8 @@ public class GameWindow extends JFrame {
     }
     private void clearFrame(JPanel panel){
         this.remove(panel);
+        this.revalidate();
+        this.repaint();
     }
 
     public static void main(String[] args) {
