@@ -11,7 +11,7 @@ public class ServerListener {
     }
 
     public ServerListener() throws IOException {
-        try(ServerSocket ss = new ServerSocket(55555)){
+        try(ServerSocket ss = new ServerSocket(55557)){
 
 
             while (true){
