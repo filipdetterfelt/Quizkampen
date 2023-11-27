@@ -1,14 +1,10 @@
 import QuestionManager.QuestionManager;
 import QuestionManager.QuestionDatabase;
-import QuestionManager.Question;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Server extends Thread{
@@ -47,13 +43,15 @@ public class Server extends Thread{
             Object p1InObj, p2InObj = null, outObj;
 
 
-            while ((p1InObj = p1In.readObject()) != null || (p2InObj = p2In.readObject()) != null){
-                try {
+            while ((p1InObj = p1In.readObject()) != null || (p2InObj = p2In.readObject()) != null) {
+                if (testProtocol.getState() == 1){
+                }else if (testProtocol.getState() == 2) {
                     p1Out.writeObject(testProtocol.process(p1InObj));
+                }else if (testProtocol.getState() == 3) {
                     p2Out.writeObject(testProtocol.process(p2InObj));
-                    }
-                catch (IOException e){
-                    e.printStackTrace();
+                }else if (testProtocol.getState() == 4) {
+                    p1Out.writeObject(3);
+                    p2Out.writeObject(testProtocol.process(p2InObj));
                 }
             }
         }

@@ -22,7 +22,6 @@ public class TestProtocol {
     private static final int PLAYER_TWO_QUESTION = 4;
     //State för avslutat spel
     private static final int GAME_END = 5;
-
     private int state = AWAITING_CLIENT_CONNECTION;
     private int clients;
 
@@ -51,6 +50,7 @@ public class TestProtocol {
     List<Question> qList = new ArrayList<>();
     int questions = 1;
     public Object process(Object inObj) {
+        System.out.println("Process har mottagit object: " + inObj);
         int categories = 0;
         Object p1OutObj = null;
         Object p2OutObj = null;

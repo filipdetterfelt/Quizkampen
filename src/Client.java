@@ -28,7 +28,7 @@ public class Client {
             String cat1 = null, cat2 = null;
 
             while ((tempObject = in.readObject()) != null) {
-                System.out.println("Klient mottagit object");
+                System.out.println("Klient mottagit object: " + tempObject);
 
                 //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
                 if (tempObject instanceof List<?>){
@@ -84,16 +84,7 @@ public class Client {
                             System.out.println("Integer mottagen");
                     g.drawWaitingForOpponentScreen(tempInt);
                             System.out.println("Test efter draw");
-                } else if (tempObject instanceof String){
-                    System.out.println("Temp mottagen");
-                    String temp = (String) tempObject;
-                    if (temp.matches("TEMP")){
-                        System.out.println("temp matchade");
-                        g.drawWaitingForOpponentScreen(0);
-                    }
                 }
-
-
             }
         } catch (EOFException e){
             System.out.println("Slutet av filen");
