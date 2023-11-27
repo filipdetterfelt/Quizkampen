@@ -1,6 +1,5 @@
-/*package Old2;
+import QuestionManager.Question;
 
-import Old2.QuestionManagerOLD.Question;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -17,18 +16,18 @@ public class GameWindow extends JFrame {
     JPanel categoryScreenPanel = new JPanel(new GridLayout(3,1,10,10));
     JPanel categoryCenteringPanel = new JPanel(new GridBagLayout());
     JLabel categoryLabel = new JLabel("Välj en kategori");
-    JButton category1Btn = new JButton("Kategori 1");
-    JButton category2Btn = new JButton("Kategori 1");
+    public JButton category1Btn = new JButton("Kategori 1");
+    public JButton category2Btn = new JButton("Kategori 1");
 
     //questionsScreen
     JPanel questionsScreenPanel = new JPanel(new GridLayout(2,1,10,10));
     JPanel questionCenteringPanel = new JPanel(new GridBagLayout());
     JPanel questionsPanel = new JPanel(new GridLayout(2,2,10,10));
     JLabel questionLabel = new JLabel("Frågan visas här");
-    JButton answer1Btn = new JButton("Svar 1");
-    JButton answer2Btn = new JButton("Svar 2");
-    JButton answer3Btn = new JButton("Svar 3");
-    JButton answer4Btn = new JButton("Svar 4");
+    public JButton answer1Btn = new JButton("Svar 1");
+    public JButton answer2Btn = new JButton("Svar 2");
+    public JButton answer3Btn = new JButton("Svar 3");
+    public JButton answer4Btn = new JButton("Svar 4");
 
     //waitingForOpponentScreen
     JPanel waitingForOpponentPanel = new JPanel(new GridLayout(2,1,10,10));
@@ -65,7 +64,7 @@ public class GameWindow extends JFrame {
     //TODO
     /*
     Saknas funktion för att rätta ett svar och få tillbaka informationen från servern.
-
+     */
 
     public void drawStartScreen(){
         add(startScreenPanel);
@@ -270,4 +269,3 @@ public class GameWindow extends JFrame {
         return userInput;
     }
 }
-*/

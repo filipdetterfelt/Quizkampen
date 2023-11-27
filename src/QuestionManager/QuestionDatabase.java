@@ -1,4 +1,6 @@
-package Old2.QuestionManager;
+package QuestionManager;
+
+import QuestionManager.Question;
 
 import java.util.*;
 

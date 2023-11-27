@@ -1,4 +1,4 @@
-package Old2;
+/*package Old2;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -91,6 +91,6 @@ public class Protocol {
         return returnString;
     }
 
-     */
-}
 
+}
+*/
