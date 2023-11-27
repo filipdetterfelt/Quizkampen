@@ -3,54 +3,42 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuizkampenPlayer {
+public class QuizkampenPlayer extends Thread  {
     String name;
     int pointsPerGame = 0;
     int totalPoints = 0;
+
     List<Integer> listOfPoints = new ArrayList<>();
+
     QuizkampenPlayer opponent;
     Socket socket;
-    ObjectInputStream input;
-    ObjectOutputStream output;
+
+    ObjectInputStream in;
+    ObjectOutputStream out;
 
     /**
      * Constructs a handler thread for a given socket and mark
      * initializes the stream fields, displays the first two
      * welcoming messages.
      */
-    public QuizkampenPlayer(Socket socket, String name) {
+    public QuizkampenPlayer(Socket socket, String name) throws Exception {
         this.socket = socket;
         this.name = name;
-        System.out.println(this.name);
-        try {
-            System.out.println("Trying to create input + output streams for " + this.name );
-            this.input = new ObjectInputStream(socket.getInputStream());
-            this.output = new ObjectOutputStream(socket.getOutputStream());
-            System.out.println("Sucess created input + output streams for " + this.name );
-        } catch (IOException e) {
-            System.out.println("Player died: " + e);
-        }
+        System.out.println("Trying to create input + output streams for " + this.name );
+        this.out = new ObjectOutputStream(this.socket.getOutputStream());
+        this.in = new ObjectInputStream(this.socket.getInputStream());
+        System.out.println("Sucess created input + output streams for " + this.name );
     }
-/*    public ServerSidePlayer(Socket socket, char mark) {
-        this.socket = socket;
-        this.mark = mark;
-        try {
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            output = new PrintWriter(socket.getOutputStream(), true);
-        } catch (IOException e) {
-            System.out.println("Player died: " + e);
-        }
-    }*/
 
     //Sends data to client
     public void send(Object mess) throws IOException{
-        output.writeObject(mess);
+        this.out.writeObject(mess);
     }
 
     //Receives data from client
     public Object receive()  {
         try {
-            return input.readObject();
+            return this.in.readObject();
         } catch (Exception e ) {
             System.out.println("Player "+name+" could not receive data " + e);
             throw new RuntimeException(e);

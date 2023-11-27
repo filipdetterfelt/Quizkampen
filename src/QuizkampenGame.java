@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class QuizkampenGame extends Thread{
+public class QuizkampenGame{
 
     QuizkampenPlayer playerOne;
     QuizkampenPlayer playerTwo;
@@ -18,12 +18,10 @@ public class QuizkampenGame extends Thread{
     List<String> tempList = new ArrayList<>();
     Properties p = loadProperties();
 
-    public Properties loadProperties() {
+    Properties loadProperties() {
         Properties p = new Properties();
         try {
             p.load(new FileInputStream("src/MyProperties.properties"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -46,9 +44,9 @@ public class QuizkampenGame extends Thread{
 
     public void run() {
         try {
-            playerOne.send("QuizkamenGame - run() -> Welcome " + playerOne);
+            playerOne.send("QuizkamenGame - run() -> Welcome " + playerOne.name);
             playerOne.send("QuizkamenGame - run() -> Waiting for opponent to connect");
-            playerTwo.send("QuizkamenGame - run() -> Welcome " + playerTwo);
+            playerTwo.send("QuizkamenGame - run() -> Welcome " + playerTwo.name);
             playerTwo.send("QuizkamenGame - run() -> "  + playerOne.name + " and " + playerTwo.name + " are connected");
         } catch (IOException e) {
             throw new RuntimeException(e);
