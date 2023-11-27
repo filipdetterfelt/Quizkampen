@@ -27,7 +27,7 @@ public class QuizkampenPlayer extends Thread  {
         System.out.println("Trying to create input + output streams for " + this.name );
         this.out = new ObjectOutputStream(this.socket.getOutputStream());
         this.in = new ObjectInputStream(this.socket.getInputStream());
-        System.out.println("Sucess created input + output streams for " + this.name );
+        System.out.println("Successfully created input + output streams for " + this.name );
     }
 
     //Sends data to client

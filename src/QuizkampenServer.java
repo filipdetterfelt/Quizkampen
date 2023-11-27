@@ -20,5 +20,5 @@ public class QuizkampenServer {
                 game.run();
             }
         }
-        }
     }
+}
