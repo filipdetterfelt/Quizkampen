@@ -1,6 +1,7 @@
-import QuestionManager.Question;
+package Old2;
 
-import javax.swing.*;
+import Old2.QuestionManager.Question;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;

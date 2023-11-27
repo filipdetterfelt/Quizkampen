@@ -1,12 +1,12 @@
-import QuestionManager.QuestionManager;
-import QuestionManager.QuestionDatabase;
-import QuestionManager.Question;
+package Old2;
+
+import Old2.QuestionManager.QuestionManager;
+import Old2.QuestionManager.QuestionDatabase;
+import Old2.QuestionManager.Question;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
