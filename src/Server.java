@@ -30,6 +30,7 @@ public class Server extends Thread{
         try {
             TestProtocol tp = new TestProtocol(this, currentPlayer, p1, p2);
             System.out.println("Sending 2 categories to " + currentPlayer.getClientUsername());
+            currentPlayer.getOutputStream().reset();
             currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
 
             while (currentPlayer == p1) {
@@ -37,15 +38,22 @@ public class Server extends Thread{
                 objectCounter = 0;
 
                 while ((fromPLayer = p1.getInputStream().readObject()) != null) {
+
                     objectCounter++;
                     System.out.println("Object counter: " + objectCounter);
+/*                    if (fromPLayer instanceof Boolean){
+                        currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
+                        System.out.println("Boolean mottagen");
+                    }*/
                     if (currentPlayer != p1) {
                         System.out.println("breaking out of loop");
+                        p2.getOutputStream().reset();
                         p2.getOutputStream().writeObject(tp.process(fromPLayer));
                         System.out.println("p2 sent: " + fromPLayer);
                         break;
                     }
                     System.out.println("Sending new object to process: " + fromPLayer);
+                    p1.getOutputStream().reset();
                     p1.getOutputStream().writeObject(tp.process(fromPLayer));
                 }
             }
@@ -57,13 +65,19 @@ public class Server extends Thread{
                     System.out.println("Fromplayer: " + fromPLayer);
                     objectCounter++;
                     System.out.println("Object counter: " + objectCounter);
+  /*                  if (fromPLayer instanceof Boolean){
+                        currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
+                        System.out.println("Boolean mottagen");
+                    }*/
                     if (currentPlayer != p2) {
                         System.out.println("breaking out of loop");
+                        p1.getOutputStream().reset();
                         p1.getOutputStream().writeObject(tp.process(fromPLayer));
                         System.out.println("p1 sent: " + fromPLayer);
                         break;
                     }
                     System.out.println("Sending new object to process: " + fromPLayer);
+                    p2.getOutputStream().reset();
                     p2.getOutputStream().writeObject(tp.process(fromPLayer));
 
                 }
