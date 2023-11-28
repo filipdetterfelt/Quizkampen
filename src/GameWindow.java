@@ -102,6 +102,7 @@ public class GameWindow extends JFrame {
     }
 
     public void drawQuestionsScreen(Question recievedQuestion){
+        System.out.println("Drawing questionsScreen");
         clearFrame(categoryScreenPanel);
         clearFrame(startScreenPanel);
         clearFrame(waitingForOpponentPanel);

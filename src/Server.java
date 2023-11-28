@@ -34,6 +34,7 @@ public class Server extends Thread{
 
             while (currentPlayer == p1) {
                 System.out.println("Inside p1 loop");
+                objectCounter = 0;
 
                 while ((fromPLayer = p1.getInputStream().readObject()) != null) {
                     objectCounter++;
@@ -50,8 +51,10 @@ public class Server extends Thread{
             }
             while (currentPlayer == p2){
                 System.out.println("Inside p2 loop");
+                objectCounter = 0;
 
                 while ((fromPLayer = p2.getInputStream().readObject()) != null) {
+                    System.out.println("Fromplayer: " + fromPLayer);
                     objectCounter++;
                     System.out.println("Object counter: " + objectCounter);
                     if (currentPlayer != p2) {
