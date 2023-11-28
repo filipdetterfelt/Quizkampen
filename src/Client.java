@@ -12,14 +12,16 @@ public class Client {
     String username;
     ObjectOutputStream out;
     ObjectInputStream in;
+    Question tempQ;
     private static int PORT = 55555;
+    public Client() {}
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
-        GameWindow g = new GameWindow();
         this.socket = socket;
         this.username = username;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
+        GameWindow g = new GameWindow(out, this);
         try
 
         {
@@ -45,6 +47,7 @@ public class Client {
                     g.drawCategoryScreen(cat1,cat2);
 
                     //Action listener för kategorierna, skickar vald kategori som sträng till servern
+                    /*
                     g.category1Btn.addActionListener(e -> {String temp = g.category1Btn.getText();
                         try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
                     });
@@ -52,41 +55,13 @@ public class Client {
                         try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
                     });
 
+                     */
+
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
-                    Question tempQ = (Question) tempObject;
+                    tempQ = (Question) tempObject;
                     System.out.println("Client fick fråga: " + tempQ.getQuestion());
-                    //Ritar upp frågeskärmen med frågan som inparameter
                     g.drawQuestionsScreen(tempQ);
-
-                    /* Action listener för svarsknapparna, skickar tillbaka en int beroende på om
-                       svaret är rätt eller fel. Rätt = 1, Fel = 0 */
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            g.answer1Btn.addActionListener(e -> {
-                                if (g.checkAnswer(0,tempQ.getCorrectOptionIndex(),g.answer1Btn)){
-                                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-                            });
-                            g.answer2Btn.addActionListener(e -> {
-                                if (g.checkAnswer(1,tempQ.getCorrectOptionIndex(),g.answer2Btn)){
-                                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-                            });
-                            g.answer3Btn.addActionListener(e -> {
-                                if (g.checkAnswer(2,tempQ.getCorrectOptionIndex(),g.answer3Btn)){
-                                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-
-                            });
-                            g.answer4Btn.addActionListener(e -> {
-                                if (g.checkAnswer(3,tempQ.getCorrectOptionIndex(),g.answer4Btn)){
-                                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-                            });
-                        }
-                    });
                 } else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
                             System.out.println("Integer mottagen");
