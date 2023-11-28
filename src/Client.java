@@ -66,6 +66,7 @@ public class Client {
                     int tempInt = (Integer) tempObject;
                             System.out.println("Integer mottagen");
                     g.drawWaitingForOpponentScreen(tempInt);
+                    out.writeObject("testString");
                             System.out.println("Test efter draw");
                 }
             }

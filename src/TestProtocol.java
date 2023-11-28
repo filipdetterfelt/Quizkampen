@@ -57,10 +57,11 @@ public class TestProtocol {
     List<Question> qList = new ArrayList<>();
     List<Question> questionsForThisGame = new ArrayList<>();
     int questions = 0; //VAR 1
+    int categories = 0;
     public Object process(Object inObj) {
         System.out.println("ENTER STATE = " + state);
         System.out.println("Process har mottagit object: " + inObj);
-        int categories = 0;
+
         Object processedObject = null;
         System.out.println(server.getCurrentPlayer().getClientUsername());
 
@@ -98,6 +99,7 @@ public class TestProtocol {
                     System.out.println("P1 Question number" + questions);
                     System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
                     questions++;
+                    categories++;
                     System.out.println("Sending question from category state");
                 }
                 state = PLAYER_ONE_QUESTION;
@@ -142,6 +144,10 @@ public class TestProtocol {
                         System.out.println("P1 Question number" + questions);
                         questions++;
                     }
+                } else if (inObj instanceof String) {
+                    questions = 0;
+                    processedObject = questionsForThisGame.get(questions);
+                    questions++;
                 }
             }
             case PLAYER_TWO_CHOOSE_CATEGORY -> {
@@ -154,9 +160,11 @@ public class TestProtocol {
                     questions = 0;
                     questionsForThisGame = qm.getQuestions((String) inObj);
                     processedObject = questionsForThisGame.get(questions);
+                    questions++;
                     System.out.println("P2 Question number " + questions);
                     System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
                     state = PLAYER_TWO_QUESTION;
+                    categories++;
                 }
                 if (inObj instanceof List<?> ){
                     tempCategoryList.add((String) ((List<?>) inObj).get(0));
@@ -179,10 +187,19 @@ public class TestProtocol {
                             System.out.println("FEL");
                         }
                         System.out.println("questions == inputQuestions");
-                        state = PLAYER_TWO_CHOOSE_CATEGORY;
-                        questions = 0;
-                        System.out.println("Questions set at: " + questions);
-                        processedObject = server.getListOfCategories();
+                        if (categories == inputCategories){
+                            System.out.println("categories == inputCategories");
+                            processedObject = 3;
+                            server.setCurrentPlayer(p1);
+                            state = PLAYER_ONE_QUESTION;
+                        }
+                        if (categories < inputCategories) {
+                            System.out.println("categories < inputCategories");
+                            state = PLAYER_TWO_CHOOSE_CATEGORY;
+                            questions = 0;
+                            System.out.println("Questions set at: " + questions);
+                            processedObject = server.getListOfCategories();
+                        }
 
                     } else if (questions < inputQuestions){
                         if ((Integer) inObj == 1){
@@ -194,10 +211,12 @@ public class TestProtocol {
                         processedObject = questionsForThisGame.get(questions);
                         System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
                         questions++;
-
                     }
+                } else if (inObj instanceof String) {
+                    processedObject = questionsForThisGame.get(questions);
+                    questions++;
                 }
-                System.out.println("P2 QUESTIONCOUNTER: " + questions);
+                System.out.println("P2 QUESTION COUNTER: " + questions);
             }
         }
         System.out.println("EXIT STATE = " + state);
