@@ -1,6 +1,8 @@
 import QuestionManager.Question;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -46,6 +48,13 @@ public class GameWindow extends JFrame {
     JLabel opponentScoreLabel = new JLabel("0");
 
     String userInput = null;
+    ObjectOutputStream out;
+
+    Client c = new Client();
+    public GameWindow (ObjectOutputStream o, Client c){
+        this.out = o;
+        this.c = c;
+    }
     public GameWindow(String userInput){this.userInput = userInput;}
     public GameWindow(){
 
@@ -136,6 +145,74 @@ public class GameWindow extends JFrame {
         setVisible(true);
         setResizable(true);
 
+                    /* Action listener för svarsknapparna, skickar tillbaka en int beroende på om
+                       svaret är rätt eller fel. Rätt = 1, Fel = 0 */
+
+            answer1Btn.addActionListener(e -> {
+                if (checkAnswer(0,c.tempQ.getCorrectOptionIndex(),answer1Btn)){
+                    try {
+                        System.out.println("I actionlistener knapp 1");
+                        out.writeObject(1);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    try {
+                        System.out.println("I actionlistener knapp 1-2");
+                        out.writeObject(0);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }}
+            });
+            answer2Btn.addActionListener(e -> {
+                if (checkAnswer(1,c.tempQ.getCorrectOptionIndex(),answer2Btn)){
+                    try {
+                        System.out.println("I actionlistener knapp 2-1");
+                        out.writeObject(1);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    try {
+                        System.out.println("I actionlistener knapp 2-2");
+                        out.writeObject(0);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }}
+            });
+            answer3Btn.addActionListener(e -> {
+                if (checkAnswer(2,c.tempQ.getCorrectOptionIndex(),answer3Btn)){
+                    try {
+                        System.out.println("I actionlistener knapp 3-1");
+                        out.writeObject(1);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    try {
+                        System.out.println("I actionlistener knapp 3-2");
+                        out.writeObject(0);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }}
+
+            });
+            answer4Btn.addActionListener(e -> {
+                if (checkAnswer(3,c.tempQ.getCorrectOptionIndex(),answer4Btn)){
+                    try {
+                        System.out.println("I actionlistener knapp 4-1");
+                        out.writeObject(1);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    try {
+                        System.out.println("I actionlistener knapp 4-2");
+                        out.writeObject(0);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }}
+            });
     }
 
     public void drawWaitingForOpponentScreen(int tempInt){
