@@ -7,11 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Stack;
 
 public class TestProtocol {
 
     //State för att invänta att båda är connected
-    private static final int AWAITING_CLIENT_CONNECTION = 0;
+    private static final int ROUND_ONE_START = 0;
     //State för att dela ut kategori till Player 1, och be Player 2 att vänta
     private static final int PLAYER_ONE_CHOOSE_CATEGORY = 1;
     //State för att Player 1 ska få och svara på x frågor
@@ -22,8 +23,7 @@ public class TestProtocol {
     private static final int PLAYER_TWO_QUESTION = 4;
     //State för avslutat spel
     private static final int GAME_END = 5;
-
-    private int state = AWAITING_CLIENT_CONNECTION;
+    private int state = ROUND_ONE_START;
     private int clients;
 
     Properties p = loadProperties();
@@ -41,105 +41,191 @@ public class TestProtocol {
     }
     int inputQuestions = Integer.parseInt(p.getProperty("questions"));
     int inputCategories = Integer.parseInt(p.getProperty("categories"));
+    Server server;
+    ClientHandler currentPlayer;
+    ClientHandler p1;
+    ClientHandler p2;
 
-
-    Player player = new Player();
-    public TestProtocol() throws IOException {
+    public TestProtocol(Server server, ClientHandler currentPlayer, ClientHandler p1, ClientHandler p2) throws IOException {
+        this.currentPlayer = currentPlayer;
+        this.server = server;
+        this.p1 = p1;
+        this.p2 = p2;
         System.out.println("Protocol initialized");
     }
 
     List<Question> qList = new ArrayList<>();
-    int questions = 1;
+    List<Question> questionsForThisGame = new ArrayList<>();
+    int questions = 0; //VAR 1
+    int categories = 0;
     public Object process(Object inObj) {
-        int categories = 0;
-        Object p1OutObj = null;
-        Object p2OutObj = null;
+        System.out.println("ENTER STATE = " + state);
+        System.out.println("Process har mottagit object: " + inObj);
 
-        List<String> tempList = new ArrayList<>();
+        Object processedObject = null;
+        System.out.println(server.getCurrentPlayer().getClientUsername());
+
+        List<String> tempCategoryList = new ArrayList<>();
+        List<String> tempCategory2List = new ArrayList<>();
         String tempString;
         int tempInt;
-
         QuestionManager qm = new QuestionManager();
 
-        if (state == AWAITING_CLIENT_CONNECTION) {
-            System.out.println("state = AWAITING_CLIENT_CONNECTION");
-            if (inObj instanceof Integer) {
-                if (inObj == (Integer) 2) {
+        switch (state){
+            case ROUND_ONE_START -> {
+                /*
+                    När båda spelarna har connectat så kommer spelet starta, och klient 1 kommer alltid att börja
+                    med att skicka över listan med blandade kategorier som finns i databasen.
+                    Då vill vi returnera en lista med 2 utvalda kategorier till klienten,
+                    som då ritar upp kategoriskärmen.
+                 */
+                if (inObj instanceof List<?>){
+                    tempCategoryList.add((String) ((List<?>) inObj).get(0));
+                    tempCategoryList.add((String) ((List<?>) inObj).get(1));
+                    processedObject = tempCategoryList;
                     state = PLAYER_ONE_CHOOSE_CATEGORY;
-                    System.out.println("state set as = PLAYER_ONE_CHOOSE_CATEGORY");
                 }
             }
-        } else if (state == PLAYER_ONE_CHOOSE_CATEGORY) {
-            System.out.println("state == PLAYER_ONE_CHOOSE_CATEGORY");
-            if (categories < inputCategories) {
-                if (inObj instanceof List<?>) {
-                    tempList.add((String) ((List<?>) inObj).get(0));
-                    tempList.add((String) ((List<?>) inObj).get(1));
-                    p1OutObj = tempList;
+            case PLAYER_ONE_CHOOSE_CATEGORY -> {
+                /*
+                    När klienten returnerar sin valda kategori, så vill vi ta två frågor ur den kategorins lista
+                    och lägga dom i en temporär lista med Questions. Sedan returnerar vi den första frågan ur den listan
+                    till klienten, och adderar frågorna som skickats med 1. Sedan byter vi state till PLAYER_ONE_QUESTION
+                    för att hantera de integer som kommer som svar.
+                 */
+                if (inObj instanceof String){
+                    questionsForThisGame = qm.getQuestions((String) inObj);
+                    processedObject = questionsForThisGame.get(questions);
+                    System.out.println("P1 Question number" + questions);
+                    System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
+                    questions++;
+                    categories++;
+                    System.out.println("Sending question from category state");
                 }
-                categories++;
                 state = PLAYER_ONE_QUESTION;
             }
-            else {
-                //player 2 pick category
-            }
-        } else if (state == PLAYER_ONE_QUESTION) {
-            System.out.println("state == PLAYER_ONE_QUESTION");
+            case PLAYER_ONE_QUESTION -> {
+                 /*
+                    Om det vi får in är en integer, så är det antingen rätt eller fel (1, 0) från klienten när den har
+                    svarat på en fråga. Om det vi får in är svaret på den andra frågan, så vill vi ändra state samt ändra
+                    currentPlayer hos servern. Sedan returnerar vi första frågan som klient 1 svarat på. Denna går
+                    då till klient 2.
+                 */
+                if (inObj instanceof Integer){
+                    if (questions == inputQuestions){
+                /*
+                    Är questions == inputQuestions, så har klient 1 nu svarat på sina frågor, och vi vill då sätta
+                    currentPlayer hos servern till klient 2. Sedan returnerar vi en 3'a, så klienten ritar upp sin
+                    waitScreen med sina poäng. Vi sätter också state till PLAYER_TWO_QUESTION.
+                 */
+                        System.out.println("questions == inputQuestions");
+                        state = PLAYER_TWO_QUESTION;
+                        server.setCurrentPlayer(p2);
+                        System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
+                        questions = 0;
+                        System.out.println("Questions set at: " + questions);
+                        processedObject = 3;
+                        System.out.println("processedQuestion is: " + questionsForThisGame.get(questions).getQuestion());
 
-            if (inputQuestions > questions ) {
-                if (inObj instanceof String) {
-                    tempString = (String) inObj;
-                    qList = qm.getQuestions(tempString);
-
-                } else if (inObj instanceof Integer) {
-                    tempInt = (Integer) inObj;
-                    if (tempInt == 1){
-                        System.out.println("Poäng: 1");
-                    } else if (tempInt == 0){
-                        System.out.println("Poäng: 0");
+                    } else if (questions < inputQuestions){
+                /*
+                    Är question < inputQuestions så ska klient 1 svara på fler frågor.
+                    Vi kontrollerar om vi fick rätt eller fel svar (1, 0), och sedan returnerar vi nästa fråga
+                    till klienten och sätter questions ++;
+                 */
+                        if ((Integer) inObj == 1){
+                            System.out.println("RÄTT");
+                        } else if ((Integer) inObj == 0){
+                            System.out.println("FEL");
+                        }
+                        System.out.println("Vi är i questions < inputQuestions");
+                        processedObject = questionsForThisGame.get(questions);
+                        System.out.println("processedQuestion is: " + questionsForThisGame.get(questions).getQuestion());
+                        System.out.println("P1 Question number" + questions);
+                        questions++;
                     }
+                } else if (inObj instanceof String) {
+                    questions = 0;
+                    processedObject = questionsForThisGame.get(questions);
                     questions++;
                 }
-                System.out.println("Questions " + questions);
-                p1OutObj = qList.get(questions-1);
+            }
+            case PLAYER_TWO_CHOOSE_CATEGORY -> {
+                /*
+                Om vi får in en sträng från klienten så är det svaret på vilken kategori spelaren valt.
+                Vi returnerar då den första frågan till klienten och sätter state som PLAYER_TWO_QUESTION.
 
-            } else if (questions == inputQuestions) {
-                System.out.println("Setting state = PLAYER_TWO_QUESTION");
+                 */
+                if (inObj instanceof String){
+                    questions = 0;
+                    questionsForThisGame = qm.getQuestions((String) inObj);
+                    processedObject = questionsForThisGame.get(questions);
+                    questions++;
+                    System.out.println("P2 Question number " + questions);
+                    System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
+                    state = PLAYER_TWO_QUESTION;
+                    categories++;
+                }
+                if (inObj instanceof List<?> ){
+                    tempCategoryList.add((String) ((List<?>) inObj).get(0));
+                    tempCategoryList.add((String) ((List<?>) inObj).get(1));
+                    processedObject = tempCategoryList;
+                }
                 state = PLAYER_TWO_QUESTION;
-                questions = 1;
-            }
-
-        } else if (state == PLAYER_TWO_QUESTION) {
-            System.out.println("state == PLAYER_TWO_QUESTION");
-
-            if (inputQuestions > questions ) {
-                if (inObj instanceof String) {
-                    tempString = (String) inObj;
-                    qList = qm.getQuestions(tempString);
-
-                } else if (inObj instanceof Integer) {
-                    tempInt = (Integer) inObj;
-                    if (tempInt == 1){
-                        System.out.println("Poäng: 1");
-                    } else if (tempInt == 0){
-                        System.out.println("Poäng: 0");
-                    }
-
-                    questions++;
-                    System.out.println("Questions " + questions);
-
+                if (inObj instanceof Integer){
+                    System.out.println("P2 CATEGORY FICK IN EN INT");
+                    state = PLAYER_TWO_CHOOSE_CATEGORY;
                 }
-                System.out.println("Questions " + questions);
-                p2OutObj = qList.get(questions-1);
-
-            } else {
-                state = PLAYER_TWO_CHOOSE_CATEGORY;
-                questions = 1;
+                System.out.println("P2 QUESTION COUNTER: " + questions);
             }
+            case PLAYER_TWO_QUESTION -> {
+                if (inObj instanceof Integer){
+                    if (questions == inputQuestions){
+                        if ((Integer) inObj == 1){
+                            System.out.println("RÄTT");
+                        } else if ((Integer) inObj == 0){
+                            System.out.println("FEL");
+                        }
+                        System.out.println("questions == inputQuestions");
+                        if (categories == inputCategories){
+                            System.out.println("categories == inputCategories");
+                            processedObject = 3;
+                            server.setCurrentPlayer(p1);
+                            state = PLAYER_ONE_QUESTION;
+                        }
+                        if (categories < inputCategories) {
+                            System.out.println("categories < inputCategories");
+                            state = PLAYER_TWO_CHOOSE_CATEGORY;
+                            questions = 0;
+                            System.out.println("Questions set at: " + questions);
+                            processedObject = server.getListOfCategories();
+                        }
 
+                    } else if (questions < inputQuestions){
+                        if ((Integer) inObj == 1){
+                            System.out.println("RÄTT");
+                        } else if ((Integer) inObj == 0){
+                            System.out.println("FEL");
+                        }
+                        System.out.println("Vi är i questions < inputQuestions");
+                        processedObject = questionsForThisGame.get(questions);
+                        System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
+                        questions++;
+                    }
+                } else if (inObj instanceof String) {
+                    processedObject = questionsForThisGame.get(questions);
+                    questions++;
+                }
+                System.out.println("P2 QUESTION COUNTER: " + questions);
+            }
         }
-        return p1OutObj;
+        System.out.println("EXIT STATE = " + state);
+        System.out.println("Process returning: " + processedObject);
+        return processedObject;
+
     }
+
+
     public int getState() {
         return state;
     }
