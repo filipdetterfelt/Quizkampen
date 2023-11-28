@@ -1,64 +1,86 @@
 import QuestionManager.QuestionManager;
 import QuestionManager.QuestionDatabase;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
 public class Server extends Thread{
     Socket socket;
-    Player p1;
-    Player p2;
-    Player currentPlayer;
+    ClientHandler p1;
+    ClientHandler p2;
+    ClientHandler currentPlayer;
+    QuestionManager qm = new QuestionManager();
+    List<String> listOfCategories = qm.getCategories();
 
-    public Server(Player p1, Player p2) throws IOException {
+    public Server(ClientHandler p1, ClientHandler p2) {
         this.p1 = p1;
         this.p2 = p2;
         this.currentPlayer = p1;
-    }
-
-    public Server(Socket socket) throws IOException {
-        this.socket = socket;
+        System.out.println("Game has started!");
+        System.out.println(p1.getClientUsername() + " VS " + p2.getClientUsername());
     }
 
     public void run(){
 
         System.out.println("Server is running");
-        QuestionDatabase qdb = new QuestionDatabase();
-        QuestionManager qm = new QuestionManager();
-        List<String> listOfCategories = qm.getCategories();
-
-        try(
-            ObjectOutputStream p1Out = new ObjectOutputStream(p1.sock.getOutputStream());
-            ObjectInputStream p1In = new ObjectInputStream(p1.sock.getInputStream());
-            ObjectOutputStream p2Out = new ObjectOutputStream(p2.sock.getOutputStream());
-            ObjectInputStream p2In = new ObjectInputStream(p2.sock.getInputStream())) {
-
-            TestProtocol testProtocol = new TestProtocol();
-            testProtocol.setClientCounter(2);
-            testProtocol.process(2);
-            p1Out.writeObject(testProtocol.process(listOfCategories));
-            Object p1InObj, p2InObj = null, outObj;
 
 
-            while ((p1InObj = p1In.readObject()) != null || (p2InObj = p2In.readObject()) != null) {
-                if (testProtocol.getState() == 1){
-                }else if (testProtocol.getState() == 2) {
-                    p1Out.writeObject(testProtocol.process(p1InObj));
-                }else if (testProtocol.getState() == 3) {
-                    p2Out.writeObject(testProtocol.process(p2InObj));
-                }else if (testProtocol.getState() == 4) {
-                    p1Out.writeObject(3);
-                    p2Out.writeObject(testProtocol.process(p2InObj));
+        Object fromPLayer;
+        int objectCounter = 0;
+        try {
+            TestProtocol tp = new TestProtocol(this, currentPlayer, p1, p2);
+            System.out.println("Sending 2 categories to " + currentPlayer.getClientUsername());
+            currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
+
+            while (currentPlayer == p1) {
+                System.out.println("Inside p1 loop");
+
+                while ((fromPLayer = p1.getInputStream().readObject()) != null) {
+                    objectCounter++;
+                    System.out.println("Object counter: " + objectCounter);
+                    if (currentPlayer != p1) {
+                        System.out.println("breaking out of loop");
+                        p2.getOutputStream().writeObject(tp.process(fromPLayer));
+                        System.out.println("p2 sent: " + fromPLayer);
+                        break;
+                    }
+                    System.out.println("Sending new object to process: " + fromPLayer);
+                    p1.getOutputStream().writeObject(tp.process(fromPLayer));
                 }
             }
-        }
-        catch (IOException e){
+            while (currentPlayer == p2){
+                System.out.println("Inside p2 loop");
+
+                while ((fromPLayer = p2.getInputStream().readObject()) != null) {
+                    objectCounter++;
+                    System.out.println("Object counter: " + objectCounter);
+                    if (currentPlayer != p2) {
+                        System.out.println("breaking out of loop");
+                        p1.getOutputStream().writeObject(tp.process(fromPLayer));
+                        System.out.println("p1 sent: " + fromPLayer);
+                        break;
+                    }
+                    System.out.println("Sending new object to process: " + fromPLayer);
+                    p2.getOutputStream().writeObject(tp.process(fromPLayer));
+
+                }
+            }
+
+        } catch (Exception e){
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
+
+    }
+
+    public ClientHandler getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(ClientHandler currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public List<String> getListOfCategories() {
+        return listOfCategories;
     }
 }

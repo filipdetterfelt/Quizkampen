@@ -5,22 +5,26 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Client {
     Socket socket;
+    String username;
     ObjectOutputStream out;
     ObjectInputStream in;
-    private static int PORT = 55557;
+    private static int PORT = 55555;
 
-    public Client(String serverAdress) throws ClassNotFoundException, IOException {
+    public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         GameWindow g = new GameWindow();
-        socket = new Socket(serverAdress,PORT);
-        in = new ObjectInputStream(socket.getInputStream());
-        out = new ObjectOutputStream(socket.getOutputStream());
+        this.socket = socket;
+        this.username = username;
+        this.out = new ObjectOutputStream(socket.getOutputStream());
+        this.in = new ObjectInputStream(socket.getInputStream());
         try
 
         {
-            g.drawStartScreen();
+            out.writeObject(username);
+            g.drawStartScreen(username);
 
             Object tempObject;
             String tempString;
@@ -51,33 +55,37 @@ public class Client {
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
                     Question tempQ = (Question) tempObject;
-
+                    System.out.println("Client fick fråga: " + tempQ.getQuestion());
                     //Ritar upp frågeskärmen med frågan som inparameter
                     g.drawQuestionsScreen(tempQ);
 
                     /* Action listener för svarsknapparna, skickar tillbaka en int beroende på om
                        svaret är rätt eller fel. Rätt = 1, Fel = 0 */
-                    g.answer1Btn.addActionListener(e -> {
-                        if (g.checkAnswer(0,tempQ.getCorrectOptionIndex(),g.answer1Btn)){
-                            try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                        } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-                    });
-                    g.answer2Btn.addActionListener(e -> {
-                        if (g.checkAnswer(1,tempQ.getCorrectOptionIndex(),g.answer2Btn)){
-                            try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                        } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-                    });
-                    g.answer3Btn.addActionListener(e -> {
-                        if (g.checkAnswer(2,tempQ.getCorrectOptionIndex(),g.answer3Btn)){
-                            try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-               //skriv ut
-                            } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            g.answer1Btn.addActionListener(e -> {
+                                if (g.checkAnswer(0,tempQ.getCorrectOptionIndex(),g.answer1Btn)){
+                                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+                            });
+                            g.answer2Btn.addActionListener(e -> {
+                                if (g.checkAnswer(1,tempQ.getCorrectOptionIndex(),g.answer2Btn)){
+                                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+                            });
+                            g.answer3Btn.addActionListener(e -> {
+                                if (g.checkAnswer(2,tempQ.getCorrectOptionIndex(),g.answer3Btn)){
+                                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
 
-                    });
-                    g.answer4Btn.addActionListener(e -> {
-                        if (g.checkAnswer(3,tempQ.getCorrectOptionIndex(),g.answer4Btn)){
-                            try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                        } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+                            });
+                            g.answer4Btn.addActionListener(e -> {
+                                if (g.checkAnswer(3,tempQ.getCorrectOptionIndex(),g.answer4Btn)){
+                                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+                            });
+                        }
                     });
                 } else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
@@ -94,7 +102,23 @@ public class Client {
         }
     }
 
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    public ObjectInputStream getIn() {
+        return in;
+    }
+
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Client client = new Client("127.0.0.1");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your username: ");
+        String username = scanner.nextLine();
+        Socket socket = new Socket("localhost", PORT);
+        Client client = new Client(socket,username);
     }
 }
