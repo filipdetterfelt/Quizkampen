@@ -24,68 +24,68 @@ public class Server extends Thread{
 
         System.out.println("Server is running");
 
-
         Object fromPLayer;
         int objectCounter = 0;
-        try {
-            TestProtocol tp = new TestProtocol(this, currentPlayer, p1, p2);
-            System.out.println("Sending 2 categories to " + currentPlayer.getClientUsername());
-            currentPlayer.getOutputStream().reset();
-            currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
 
-            while (currentPlayer == p1) {
-                System.out.println("Inside p1 loop");
-                objectCounter = 0;
 
-                while ((fromPLayer = p1.getInputStream().readObject()) != null) {
+            try {
+                TestProtocol tp = new TestProtocol(this, currentPlayer, p1, p2);
+                System.out.println("Sending 2 categories to " + currentPlayer.getClientUsername());
+                currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
+                while(true) {
+                if (currentPlayer == p1) {
+                    System.out.println("Inside p1 loop");
+                    objectCounter = 0;
 
-                    objectCounter++;
-                    System.out.println("Object counter: " + objectCounter);
-/*                    if (fromPLayer instanceof Boolean){
-                        currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
-                        System.out.println("Boolean mottagen");
-                    }*/
-                    if (currentPlayer != p1) {
-                        System.out.println("breaking out of loop");
-                        p2.getOutputStream().reset();
-                        p2.getOutputStream().writeObject(tp.process(fromPLayer));
-                        System.out.println("p2 sent: " + fromPLayer);
-                        break;
-                    }
-                    System.out.println("Sending new object to process: " + fromPLayer);
-                    p1.getOutputStream().reset();
-                    p1.getOutputStream().writeObject(tp.process(fromPLayer));
-                }
-            }
-            while (currentPlayer == p2){
-                System.out.println("Inside p2 loop");
-                objectCounter = 0;
-
-                while ((fromPLayer = p2.getInputStream().readObject()) != null) {
-                    System.out.println("Fromplayer: " + fromPLayer);
-                    objectCounter++;
-                    System.out.println("Object counter: " + objectCounter);
-  /*                  if (fromPLayer instanceof Boolean){
-                        currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
-                        System.out.println("Boolean mottagen");
-                    }*/
-                    if (currentPlayer != p2) {
-                        System.out.println("breaking out of loop");
-                        p1.getOutputStream().reset();
+                    while ((fromPLayer = p1.getInputStream().readObject()) != null) {
+                        if (fromPLayer instanceof Boolean) {
+                            p2.getOutputStream().writeObject(4);
+                            p1.getOutputStream().writeObject(4);
+                            break;
+                        }
+                        objectCounter++;
+                        System.out.println("Object counter: " + objectCounter);
+                        if (currentPlayer != p1) {
+                            System.out.println("breaking out of loop");
+                            p2.getOutputStream().writeObject(tp.process(fromPLayer));
+                            System.out.println("p2 sent: " + fromPLayer);
+                            break;
+                        }
+                        System.out.println("Sending new object to process: " + fromPLayer);
                         p1.getOutputStream().writeObject(tp.process(fromPLayer));
-                        System.out.println("p1 sent: " + fromPLayer);
-                        break;
                     }
-                    System.out.println("Sending new object to process: " + fromPLayer);
-                    p2.getOutputStream().reset();
-                    p2.getOutputStream().writeObject(tp.process(fromPLayer));
+                } else if (currentPlayer == p2) {
+                    System.out.println("Inside p2 loop");
+                    objectCounter = 0;
+
+                    while ((fromPLayer = p2.getInputStream().readObject()) != null) {
+
+                        System.out.println("Fromplayer: " + fromPLayer);
+                        if (fromPLayer instanceof Boolean) {
+                            p2.getOutputStream().writeObject(4);
+                            p1.getOutputStream().writeObject(4);
+                            break;
+                        }
+                        objectCounter++;
+                        System.out.println("Object counter: " + objectCounter);
+                        if (currentPlayer != p2) {
+                            System.out.println("breaking out of loop");
+                            p1.getOutputStream().writeObject(tp.process(fromPLayer));
+                            System.out.println("p1 sent: " + fromPLayer);
+                            break;
+                        }
+                        System.out.println("Sending new object to process: " + fromPLayer);
+
+                        p2.getOutputStream().writeObject(tp.process(fromPLayer));
+                    }
+
+                    }
 
                 }
-            }
 
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
     }
 

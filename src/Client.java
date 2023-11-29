@@ -16,15 +16,17 @@ public class Client {
     String username;
     ObjectOutputStream out;
     ObjectInputStream in;
-    private static int PORT = 55555;
     Question tempQ;
+    private static int PORT = 55555;
+
+    public Client() {}
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
-
         this.socket = socket;
         this.username = username;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
+        GameWindow g = new GameWindow(out, this);
         try
 
         {
@@ -48,41 +50,21 @@ public class Client {
                     System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
                     g.drawCategoryScreen(cat1,cat2);
-
-                    //Action listener för kategorierna, skickar vald kategori som sträng till servern
-                    g.category1Btn.addActionListener(e -> {
-                        String temp = g.category1Btn.getText();
-                        try {
-                            System.out.println("i action listener knapp 1");
-                            out.writeObject(temp);
-                            
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    });
-                    g.category2Btn.addActionListener(e -> {
-                        String temp = g.category2Btn.getText();
-                        try {
-                            System.out.println("i action listener knapp 2");
-                            out.writeObject(temp);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    });
-
+  
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
                     tempQ = (Question) tempObject;
                     System.out.println("Client fick fråga: " + tempQ.getQuestion());
-                    //Ritar upp frågeskärmen med frågan som inparameter
                     g.drawQuestionsScreen(tempQ);
-
-
                 } else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
-                            System.out.println("Integer mottagen");
-                    g.drawWaitingForOpponentScreen(tempInt);
-                            System.out.println("Test efter draw");
+                    if(tempInt == 3){
+                        g.drawWaitingForOpponentScreen(tempInt);
+                        out.writeObject("testString");
+                        System.out.println("Test efter draw");
+                    } if(tempInt == 4){
+                        g.drawResultScreen(5,5);
+                    }
                 }
             }
         } catch (EOFException e){
