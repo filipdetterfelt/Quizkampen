@@ -261,6 +261,9 @@ public class GameWindow extends JFrame implements ActionListener{
             System.out.println("Spelet avslutas");
             System.exit(0);
         }
+        else if (e.getSource() == playAgain){
+            System.out.println("Spelar igen");
+        }
 
     }
 
