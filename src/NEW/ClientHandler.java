@@ -1,3 +1,4 @@
+package NEW;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,13 +13,6 @@ public class ClientHandler implements Runnable{
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private String clientUsername;
-    int pointsPerGame;
-
-    public void setPointsPerGame(int pointsPerGame) {
-        this.pointsPerGame = pointsPerGame;
-    }
-
-    int totalPoints;
 
     public ClientHandler(Socket socket){
         try{
@@ -37,12 +31,10 @@ public class ClientHandler implements Runnable{
     }
 
 
-    public ClientHandler() {
-    }
 
     @Override
     public void run() {
-        
+
     }
     public Socket getSocket() {
         return socket;

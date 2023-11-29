@@ -8,13 +8,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Client {
+
+    public Client() {
+    }
+
     Socket socket;
     String username;
     ObjectOutputStream out;
     ObjectInputStream in;
     Question tempQ;
     private static int PORT = 55555;
-    public Client() {}
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;
@@ -42,21 +45,10 @@ public class Client {
                     tempList.add((String) ((List<?>) tempObject).get(1));
                     cat1 = tempList.get(0);
                     cat2 = tempList.get(1);
-
+                    System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
                     g.drawCategoryScreen(cat1,cat2);
-
-                    //Action listener för kategorierna, skickar vald kategori som sträng till servern
-                    /*
-                    g.category1Btn.addActionListener(e -> {String temp = g.category1Btn.getText();
-                        try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
-                    });
-                    g.category2Btn.addActionListener(e -> {String temp = g.category2Btn.getText();
-                        try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
-                    });
-
-                     */
-
+  
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
                     tempQ = (Question) tempObject;
@@ -64,10 +56,13 @@ public class Client {
                     g.drawQuestionsScreen(tempQ);
                 } else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
-                            System.out.println("Integer mottagen");
-                    g.drawWaitingForOpponentScreen(tempInt);
-                    out.writeObject("testString");
-                            System.out.println("Test efter draw");
+                    if(tempInt == 3){
+                        g.drawWaitingForOpponentScreen(tempInt);
+                        out.writeObject("testString");
+                        System.out.println("Test efter draw");
+                    } if(tempInt == 4){
+                        g.drawResultScreen(5,5);
+                    }
                 }
             }
         } catch (EOFException e){
