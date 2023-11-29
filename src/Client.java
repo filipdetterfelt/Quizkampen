@@ -8,12 +8,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Client {
+
+    public Client() {
+    }
+
     Socket socket;
     String username;
     ObjectOutputStream out;
     ObjectInputStream in;
     Question tempQ;
     private static int PORT = 55555;
+
     public Client() {}
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
@@ -42,10 +47,10 @@ public class Client {
                     tempList.add((String) ((List<?>) tempObject).get(1));
                     cat1 = tempList.get(0);
                     cat2 = tempList.get(1);
-
+                    System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
                     g.drawCategoryScreen(cat1,cat2);
-
+  
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
                     tempQ = (Question) tempObject;

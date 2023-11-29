@@ -27,6 +27,7 @@ public class Server extends Thread{
         Object fromPLayer;
         int objectCounter = 0;
 
+
             try {
                 TestProtocol tp = new TestProtocol(this, currentPlayer, p1, p2);
                 System.out.println("Sending 2 categories to " + currentPlayer.getClientUsername());
@@ -74,9 +75,12 @@ public class Server extends Thread{
                             break;
                         }
                         System.out.println("Sending new object to process: " + fromPLayer);
+
                         p2.getOutputStream().writeObject(tp.process(fromPLayer));
                     }
+
                     }
+
                 }
 
             } catch (Exception e) {

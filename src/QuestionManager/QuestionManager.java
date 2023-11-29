@@ -35,8 +35,10 @@ public class QuestionManager
     public List<Question> getQuestions(String category)
     {
         QuestionDatabase qdb = new QuestionDatabase();
+        List<Question> newList = qdb.getQuestions(category, inputQuestions);
+        System.out.println("NEWLIST = " + newList.size());
 
-        return qdb.getQuestions(category, inputQuestions);
+        return newList;
     }
 
     public List<String> getCategories()
