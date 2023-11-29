@@ -24,7 +24,6 @@ public class TestProtocol {
     //State för avslutat spel
     private static final int GAME_END = 5;
     private int state = ROUND_ONE_START;
-    private int clients;
 
     Properties p = loadProperties();
 
@@ -54,9 +53,8 @@ public class TestProtocol {
         System.out.println("Protocol initialized");
     }
 
-    List<Question> qList = new ArrayList<>();
     List<Question> questionsForThisGame = new ArrayList<>();
-    int questions = 0; //VAR 1
+    int questions = 0;
     int categories = 0;
     boolean gameEnd = false;
     public Object process(Object inObj) {
@@ -67,9 +65,6 @@ public class TestProtocol {
         System.out.println(server.getCurrentPlayer().getClientUsername());
 
         List<String> tempCategoryList = new ArrayList<>();
-        List<String> tempCategory2List = new ArrayList<>();
-        String tempString;
-        int tempInt;
         QuestionManager qm = new QuestionManager();
 
         switch (state){
@@ -236,19 +231,8 @@ public class TestProtocol {
         System.out.println("EXIT STATE = " + state);
         System.out.println("Process returning: " + processedObject);
         return processedObject;
-
     }
-
-
     public int getState() {
         return state;
     }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-    public int setClientCounter(int clients){
-        return this.clients = clients;
-    }
-
 }

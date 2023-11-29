@@ -69,7 +69,7 @@ public class GameWindow extends JFrame implements ActionListener{
         waitingForOpponentLabel.setText("Välkommen " + username + ".");
         startScreenPanel.add(waitingForOpponentLabel);
 
-        setTitle("Quizkampen");
+        setTitle("Quizkampen: ");
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -91,17 +91,6 @@ public class GameWindow extends JFrame implements ActionListener{
         category1Btn.setText(category1);
         category2Btn.setText(category2);
 
-
-        //Ritar upp frågeskärmen med den frågan som servern valt
-        /*
-        category1Btn.addActionListener(e -> {
-            System.out.println(category1);;
-        });
-        category2Btn.addActionListener(e -> {
-            System.out.println(category2);
-        });
-
-         */
         revalidate();
         repaint();
         category1Btn.setFocusable(false);
@@ -143,33 +132,6 @@ public class GameWindow extends JFrame implements ActionListener{
         answer2Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(1));
         answer3Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(2));
         answer4Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(3));
-        /*
-
-        SwingUtilities.invokeLater(() -> {
-            answer1Btn.addActionListener(e -> {
-                if (checkAnswer(0,c.tempQ.getCorrectOptionIndex(),answer1Btn)){
-                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-            });
-            answer2Btn.addActionListener(e -> {
-                if (checkAnswer(1,c.tempQ.getCorrectOptionIndex(),answer2Btn)){
-                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-            });
-            answer3Btn.addActionListener(e -> {
-                if (checkAnswer(2,c.tempQ.getCorrectOptionIndex(),answer3Btn)){
-                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-
-            });
-            answer4Btn.addActionListener(e -> {
-                if (checkAnswer(3,c.tempQ.getCorrectOptionIndex(),answer4Btn)){
-                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
-                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
-            });
-        });
-
-         */
 
         questionsScreenPanel.setBorder(BorderFactory.createEmptyBorder(40,20,20,20));
         setTitle("Quizkampen");

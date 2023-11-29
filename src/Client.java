@@ -53,10 +53,13 @@ public class Client {
                     g.drawQuestionsScreen(tempQ);
                 } else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
-                            System.out.println("Integer mottagen");
-                    g.drawWaitingForOpponentScreen(tempInt);
-                    out.writeObject("testString");
-                            System.out.println("Test efter draw");
+                    if(tempInt == 3){
+                        g.drawWaitingForOpponentScreen(tempInt);
+                        out.writeObject("testString");
+                        System.out.println("Test efter draw");
+                    } if(tempInt == 4){
+                        g.drawResultScreen(5,5);
+                    }
                 }
             }
         } catch (EOFException e){
