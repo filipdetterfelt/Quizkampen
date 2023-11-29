@@ -72,6 +72,7 @@ public class GameWindow extends JFrame implements ActionListener{
         category1Btn.addActionListener(this);
         category2Btn.addActionListener(this);
         exitGame.addActionListener(this);
+        playAgain.addActionListener(this);
 
 
     }
@@ -227,6 +228,16 @@ public class GameWindow extends JFrame implements ActionListener{
         setVisible(true);
         setResizable(false);
     }
+    public void restartGame(String username){
+        clearFrame(endScreen);
+        clearFrame(categoryScreenPanel);
+        clearFrame(questionsScreenPanel);
+        clearFrame(scorePanel);
+        clearFrame(waitingForOpponentPanel);
+        clearFrame(startScreenPanel);
+
+        drawStartScreen(username);
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == answer1Btn){
@@ -265,7 +276,11 @@ public class GameWindow extends JFrame implements ActionListener{
             System.exit(0);
         }
         else if (e.getSource() == playAgain){
+
             System.out.println("Spelar igen");
+
+           restartGame("Användarnamn: ");
+
         }
 
     }
