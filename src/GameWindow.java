@@ -198,6 +198,19 @@ public class GameWindow extends JFrame implements ActionListener{
         setVisible(true);
         setResizable(false);
     }
+
+    public void drawEndScreen() {
+        setLayout(new BorderLayout());
+        add(endScreen);
+
+        endScreen.setLayout(new BorderLayout());
+        endScreen.add(centerPanel, BorderLayout.CENTER);
+        endScreen.add(northPanel, BorderLayout.NORTH);
+        endScreen.add(southPanel, BorderLayout.SOUTH);
+        southPanel.add(playAgain);
+        southPanel.add(exitGame);
+        centerPanel.add(exit);
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == answer1Btn){
