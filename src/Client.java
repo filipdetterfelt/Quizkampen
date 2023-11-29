@@ -17,7 +17,7 @@ public class Client {
     ObjectOutputStream out;
     ObjectInputStream in;
     Question tempQ;
-    private static int PORT = 55555;
+    private static int PORT = 55556;
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;

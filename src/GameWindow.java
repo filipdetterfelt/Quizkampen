@@ -49,6 +49,15 @@ public class GameWindow extends JFrame implements ActionListener{
     JLabel opponentLabel = new JLabel("Motståndarens poäng:");
     JLabel opponentScoreLabel = new JLabel("0");
 
+    //Endscreen
+    JPanel endScreen = new JPanel();
+    JPanel northPanel = new JPanel();
+    JPanel centerPanel = new JPanel();
+    JPanel southPanel = new JPanel();
+    JButton playAgain = new JButton("Spela igen   ");
+    JButton exitGame = new JButton("Avsluta spelet");
+    JLabel exit = new JLabel("Spelet är avslutat");
+
     String userInput = null;
 
     Client c = new Client();

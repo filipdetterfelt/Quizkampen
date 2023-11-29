@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 public class ServerListener {
 
     public ServerListener(){
-        try(ServerSocket ss = new ServerSocket(55555)){
+        try(ServerSocket ss = new ServerSocket(55556)){
             while (true){
                 ClientHandler clientHandler = new ClientHandler(ss.accept());
                 Thread thread1 = new Thread(clientHandler);
