@@ -1,12 +1,16 @@
 import QuestionManager.Question;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-public class GameWindow extends JFrame {
+public class GameWindow extends JFrame implements ActionListener{
     //test
     //startScreen
     JPanel startScreenPanel = new JPanel();
@@ -46,11 +50,18 @@ public class GameWindow extends JFrame {
     JLabel opponentScoreLabel = new JLabel("0");
 
     String userInput = null;
-    public GameWindow(String userInput){this.userInput = userInput;}
-    public GameWindow(){
-
+    Client c = new Client();
+    ObjectOutputStream out;
+    public GameWindow (ObjectOutputStream o, Client c){
+        this.out = o;
+        this.c = c;
+        answer1Btn.addActionListener(this);
+        answer2Btn.addActionListener(this);
+        answer3Btn.addActionListener(this);
+        answer4Btn.addActionListener(this);
+        category1Btn.addActionListener(this);
+        category2Btn.addActionListener(this);
     }
-
 
     public void drawStartScreen(String username){
         add(startScreenPanel);
@@ -80,13 +91,17 @@ public class GameWindow extends JFrame {
         category1Btn.setText(category1);
         category2Btn.setText(category2);
 
+
         //Ritar upp frågeskärmen med den frågan som servern valt
+        /*
         category1Btn.addActionListener(e -> {
             System.out.println(category1);;
         });
         category2Btn.addActionListener(e -> {
             System.out.println(category2);
         });
+
+         */
         revalidate();
         repaint();
         category1Btn.setFocusable(false);
@@ -115,6 +130,7 @@ public class GameWindow extends JFrame {
         questionsPanel.add(answer2Btn);
         questionsPanel.add(answer3Btn);
         questionsPanel.add(answer4Btn);
+
         revalidate();
         repaint();
 
@@ -127,15 +143,40 @@ public class GameWindow extends JFrame {
         answer2Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(1));
         answer3Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(2));
         answer4Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(3));
+        /*
+
+        SwingUtilities.invokeLater(() -> {
+            answer1Btn.addActionListener(e -> {
+                if (checkAnswer(0,c.tempQ.getCorrectOptionIndex(),answer1Btn)){
+                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+            });
+            answer2Btn.addActionListener(e -> {
+                if (checkAnswer(1,c.tempQ.getCorrectOptionIndex(),answer2Btn)){
+                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+            });
+            answer3Btn.addActionListener(e -> {
+                if (checkAnswer(2,c.tempQ.getCorrectOptionIndex(),answer3Btn)){
+                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+
+            });
+            answer4Btn.addActionListener(e -> {
+                if (checkAnswer(3,c.tempQ.getCorrectOptionIndex(),answer4Btn)){
+                    try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+            });
+        });
+
+         */
 
         questionsScreenPanel.setBorder(BorderFactory.createEmptyBorder(40,20,20,20));
         setTitle("Quizkampen");
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
         setVisible(true);
         setResizable(true);
-
     }
 
     public void drawWaitingForOpponentScreen(int tempInt){
@@ -184,6 +225,40 @@ public class GameWindow extends JFrame {
         setVisible(true);
         setResizable(false);
     }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == answer1Btn){
+            System.out.println("Click registered for answerbtn1");
+            if (checkAnswer(0,c.tempQ.getCorrectOptionIndex(),answer1Btn)){
+                try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+            } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+        } else if (e.getSource() == answer2Btn){
+            System.out.println("Click registered for answer2Btn");
+            if (checkAnswer(1,c.tempQ.getCorrectOptionIndex(),answer2Btn)){
+                try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+            } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+        } else if (e.getSource() == answer3Btn){
+            System.out.println("Click registered for answer3Btn");
+            if (checkAnswer(2,c.tempQ.getCorrectOptionIndex(),answer3Btn)){
+                try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+            } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+        } else if (e.getSource() == answer4Btn){
+            System.out.println("Click registered for answer4Btn");
+            if (checkAnswer(3,c.tempQ.getCorrectOptionIndex(),answer4Btn)){
+                try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+            } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
+        } else if(e.getSource() == category1Btn){
+            System.out.println("Click registered for category1Btn");
+            String temp = category1Btn.getText();
+            System.out.println("Vald kategori: " + temp);
+            try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
+        } else if(e.getSource() == category2Btn){
+            System.out.println("Click registered for category2Btn");
+            String temp = category2Btn.getText();
+            System.out.println("Vald kategori: " + temp);
+            try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
+        }
+    }
 
     //Jämför knappens index mot det korrekta svarets index i frågan
     public boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
@@ -207,23 +282,11 @@ public class GameWindow extends JFrame {
         this.repaint();
     }
 
-    public static void main(String[] args) {
-        //GameWindow gameWindow = new GameWindow();
-        Question testQuestion = new Question("Vilket år inträffade den franska revolutionen?", new String[]{"1789", "1815", "1871", "1799"}, 0);
-        //QuestionDatabase database = new QuestionDatabase();
-        String testCategory1 = "Historia";
-        String testCategory2 = "Sport";
-
-        //gameWindow.drawStartScreen();
-        //gameWindow.drawCategoryScreen(testCategory1, testCategory2);
-        //gameWindow.drawWaitingForOpponentScreen(5);
-        //gameWindow.drawResultScreen();
-
-        //gameWindow.drawQuestionsScreen(testQuestion);
-
-    }
+    public static void main(String[] args) {}
 
     public String getUserInput() {
         return userInput;
     }
+
+
 }
