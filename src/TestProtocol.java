@@ -153,7 +153,6 @@ public class TestProtocol {
                  */
 
                         if ((Integer) inObj == 1){
-                            ch.pointCounter(1);
                             System.out.println("RÄTT");
                         } else if ((Integer) inObj == 0){
                             System.out.println("FEL");
@@ -208,12 +207,7 @@ public class TestProtocol {
                 if (inObj instanceof Integer){
 
                     if (questions == inputQuestions){
-                        System.out.println("I player 2 questions första else if");
-                        System.out.println("poäng i denna omgången " + ch.pointsPerGame);
-                        System.out.println("poäng totalt " + ch.totalPoints);
-                        ch.setPointsPerGame(0);
                         if ((Integer) inObj == 1){
-                            ch.pointCounter(1);
                             System.out.println("RÄTT");
                         } else if ((Integer) inObj == 0){
                             System.out.println("FEL");
@@ -242,7 +236,6 @@ public class TestProtocol {
                     } else if (questions < inputQuestions){
                         System.out.println("I player2 andra else if");
                         if ((Integer) inObj == 1){
-                            ch.pointCounter(1);
                             System.out.println("RÄTT");
                         } else if ((Integer) inObj == 0){
                             System.out.println("FEL");
