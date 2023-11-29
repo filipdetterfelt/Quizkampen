@@ -210,6 +210,17 @@ public class GameWindow extends JFrame implements ActionListener{
         southPanel.add(playAgain);
         southPanel.add(exitGame);
         centerPanel.add(exit);
+
+        centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,200));
+        exit.setFont(new Font("Arial",Font.BOLD,40));
+        centerPanel.add(exit);
+
+        revalidate();
+        repaint();
+        setSize(400,600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+        setResizable(false);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
