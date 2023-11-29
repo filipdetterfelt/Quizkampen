@@ -257,6 +257,10 @@ public class GameWindow extends JFrame implements ActionListener{
             System.out.println("Vald kategori: " + temp);
             try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
         }
+        else if (e.getSource() ==exitGame){
+            System.out.println("Spelet avslutas");
+            System.exit(0);
+        }
 
     }
 
