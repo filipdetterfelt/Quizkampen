@@ -58,6 +58,7 @@ public class TestProtocol {
     List<Question> questionsForThisGame = new ArrayList<>();
     int questions = 0; //VAR 1
     int categories = 0;
+    boolean gameEnd = false;
     public Object process(Object inObj) {
         System.out.println("ENTER STATE = " + state);
         System.out.println("Process har mottagit object: " + inObj);
@@ -126,6 +127,13 @@ public class TestProtocol {
                         System.out.println("Questions set at: " + questions);
                         processedObject = 3;
                         System.out.println("processedQuestion is: " + questionsForThisGame.get(questions).getQuestion());
+                        if (categories == inputCategories){
+                            System.out.println("categories == inputCategories");
+                            processedObject = 3;
+                            state = GAME_END;
+                            System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
+                            questions = 0;
+                        }
 
                     } else if (questions < inputQuestions){
                 /*
@@ -191,6 +199,8 @@ public class TestProtocol {
                             System.out.println("categories == inputCategories");
                             processedObject = 3;
                             server.setCurrentPlayer(p1);
+                            System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
+                            questions = 0;
                             state = PLAYER_ONE_QUESTION;
                         }
                         if (categories < inputCategories) {
@@ -217,6 +227,10 @@ public class TestProtocol {
                     questions++;
                 }
                 System.out.println("P2 QUESTION COUNTER: " + questions);
+            }
+            case GAME_END -> {
+                gameEnd = true;
+                processedObject = gameEnd;
             }
         }
         System.out.println("EXIT STATE = " + state);

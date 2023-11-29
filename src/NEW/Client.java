@@ -57,7 +57,7 @@ public class Client {
                     Question tempQ = (Question) tempObject;
                     System.out.println("Client fick fråga: " + tempQ.getQuestion());
                     //Ritar upp frågeskärmen med frågan som inparameter
-                    g.drawQuestionsScreen(tempQ);
+                    //g.drawQuestionsScreen(tempQ);
 
                     /* Action listener för svarsknapparna, skickar tillbaka en int beroende på om
                        svaret är rätt eller fel. Rätt = 1, Fel = 0 */

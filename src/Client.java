@@ -46,17 +46,6 @@ public class Client {
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
                     g.drawCategoryScreen(cat1,cat2);
 
-                    //Action listener för kategorierna, skickar vald kategori som sträng till servern
-                    /*
-                    g.category1Btn.addActionListener(e -> {String temp = g.category1Btn.getText();
-                        try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
-                    });
-                    g.category2Btn.addActionListener(e -> {String temp = g.category2Btn.getText();
-                        try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
-                    });
-
-                     */
-
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
                     tempQ = (Question) tempObject;
