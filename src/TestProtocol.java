@@ -223,6 +223,7 @@ public class TestProtocol {
                 }
                 System.out.println("P2 QUESTION COUNTER: " + questions);
             }
+
             case GAME_END -> {
                 gameEnd = true;
                 processedObject = gameEnd;
