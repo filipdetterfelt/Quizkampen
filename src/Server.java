@@ -77,6 +77,7 @@ public class Server extends Thread{
                         System.out.println("Sending new object to process: " + fromPLayer);
 
                         p2.getOutputStream().writeObject(tp.process(fromPLayer));
+
                     }
 
                     }

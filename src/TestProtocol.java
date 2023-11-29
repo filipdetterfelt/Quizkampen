@@ -259,6 +259,7 @@ public class TestProtocol {
                 gameEnd = true;
                 processedObject = gameEnd;
 
+
             }
         }
         System.out.println("EXIT STATE = " + state);

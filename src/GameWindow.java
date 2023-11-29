@@ -71,6 +71,8 @@ public class GameWindow extends JFrame implements ActionListener{
         answer4Btn.addActionListener(this);
         category1Btn.addActionListener(this);
         category2Btn.addActionListener(this);
+        exitGame.addActionListener(this);
+
 
     }
 
@@ -200,6 +202,7 @@ public class GameWindow extends JFrame implements ActionListener{
     }
 
     public void drawEndScreen() {
+        clearFrame(scorePanel);
         setLayout(new BorderLayout());
         add(endScreen);
 
