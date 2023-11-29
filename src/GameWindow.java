@@ -50,6 +50,7 @@ public class GameWindow extends JFrame implements ActionListener{
     JLabel opponentScoreLabel = new JLabel("0");
 
     String userInput = null;
+
     Client c = new Client();
     ObjectOutputStream out;
     public GameWindow (ObjectOutputStream o, Client c){
@@ -61,6 +62,7 @@ public class GameWindow extends JFrame implements ActionListener{
         answer4Btn.addActionListener(this);
         category1Btn.addActionListener(this);
         category2Btn.addActionListener(this);
+
     }
 
     public void drawStartScreen(String username){
