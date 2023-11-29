@@ -220,8 +220,16 @@ public class GameWindow extends JFrame implements ActionListener{
             System.out.println("Vald kategori: " + temp);
             try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
         }
+
     }
 
+    public void shortSleep(){
+        try{
+            Thread.sleep(500);
+        } catch (InterruptedException ex){
+            throw new RuntimeException(ex);
+        }
+    }
     //Jämför knappens index mot det korrekta svarets index i frågan
     public boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
         if (answeredIndex == correctIndex){
