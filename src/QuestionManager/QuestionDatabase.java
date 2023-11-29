@@ -1,12 +1,17 @@
 package QuestionManager;
 
 import java.util.*;
-
+/**
+    QuestionDatabase-class
+    QuestionDatabase contains a HashMap with key-value pair: categories(key) -> List<Question>(value)
+    with methods to add a question to the HashMap, return a random set of categories and questions
+ */
 public class QuestionDatabase
 {
 
     private final HashMap<String, List<Question>> categories;
 
+    //Constructor initializing the HashMap and calls for the init() method
     public QuestionDatabase()
     {
         this.categories = new HashMap<>(); // Initialize the HashMap
@@ -14,6 +19,7 @@ public class QuestionDatabase
         this.init();
     }
 
+    //Initialize method that adds multiple questions to the HashMap with different categories
     private void init()
     {
         // Kategori: Film och underhållning
@@ -192,6 +198,7 @@ public class QuestionDatabase
                 new String[]{"Asteroidbana", "Månförmörkelse", "Solsken", "Ockultation"}, 3));
     }
 
+    //Method for adding the question, if the key already exists in the HashMap (the category name) it'll add the Question-object to the list, otherwise creates a new key for the category
     public void addQuestion(String category, Question question)
     {
 
@@ -207,6 +214,8 @@ public class QuestionDatabase
         }
     }
 
+    //A method for retrieving a List<Questions> from a specific category,
+    // Then shuffles the list and adds set number of questions (based on the amount parameter) to a temporary list which is then returned
     public List<Question> getQuestions(String category, int amount) {
 
         List<Question> tempQuestionList = new ArrayList<>();
@@ -224,6 +233,8 @@ public class QuestionDatabase
         return tempQuestionList;
     }
 
+    //A method for retrieving a List<String> including all the categories(keys) from the HashMap
+    // Then shuffles the list and returns set number of categories (based on the amount parameter)
     public List<String> getCategories(int amount) {
 
         List<String> listOfCategories = new ArrayList<>();

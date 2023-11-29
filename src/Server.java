@@ -10,7 +10,7 @@ public class Server extends Thread{
     ClientHandler p2;
     ClientHandler currentPlayer;
     QuestionManager qm = new QuestionManager();
-    List<String> listOfCategories = qm.getCategories();
+    List<String> listOfCategories = this.getListOfCategories();
 
     public Server(ClientHandler p1, ClientHandler p2) {
         this.p1 = p1;
@@ -97,7 +97,12 @@ public class Server extends Thread{
         this.currentPlayer = currentPlayer;
     }
 
-    public List<String> getListOfCategories() {
+    public List<String> getListOfCategories()
+    {
+        //Gets another set of categories and returns them
+        this.listOfCategories = qm.getCategories();
+
+        System.out.println("Server - getListOfCategories() -> called the qm.getCategories() and received " + this.listOfCategories.size() + " categories");
         return listOfCategories;
     }
 }
