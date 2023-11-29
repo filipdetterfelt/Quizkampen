@@ -217,6 +217,8 @@ public class GameWindow extends JFrame implements ActionListener{
 
         revalidate();
         repaint();
+        setTitle("Quizkampen");
+        centerPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
