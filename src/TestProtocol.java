@@ -56,7 +56,7 @@ public class TestProtocol {
         this.server = server;
         this.p1 = p1;
         this.p2 = p2;
-        System.out.println("OLD.Protocol initialized");
+        //System.out.println("OLD.Protocol initialized");
     }
 
     List<Question> questionsForThisGame = new ArrayList<>();
@@ -66,8 +66,8 @@ public class TestProtocol {
     boolean gameEnd = false;
 
     public Object process(Object inObj) {
-        System.out.println("ENTER STATE = " + state);
-        System.out.println("Process har mottagit object: " + inObj);
+        //System.out.println("ENTER STATE = " + state);
+        //System.out.println("Process har mottagit object: " + inObj);
 
         Object processedObject = null;
         System.out.println(server.getCurrentPlayer().getClientUsername());
@@ -101,14 +101,14 @@ public class TestProtocol {
                     för att hantera de integer som kommer som svar.
                  */
                 if (inObj instanceof String){
-                    System.out.println("I player1 questions första if satsen");
+                    //System.out.println("I player1 questions första if satsen");
                     questionsForThisGame = qm.getQuestions((String) inObj);
                     processedObject = questionsForThisGame.get(questions);
-                    System.out.println("P1 Question number" + questions);
-                    System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
+                    //System.out.println("P1 Question number" + questions);
+                    //System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
                     questions++;
                     categories++;
-                    System.out.println("Sending question from category state");
+                    //System.out.println("Sending question from category state");
                 }
                 state = PLAYER_ONE_QUESTION;
             }
@@ -127,20 +127,27 @@ public class TestProtocol {
                     currentPlayer hos servern till klient 2. Sedan returnerar vi en 3'a, så klienten ritar upp sin
                     waitScreen med sina poäng. Vi sätter också state till PLAYER_TWO_QUESTION.
                  */
-
-                        System.out.println("questions == inputQuestions");
+                        if ((Integer) inObj == 1){
+                            p1.setScore(p1.getScore() +1 );
+                            System.out.println("RÄTT");
+                            System.out.println("P1 SCORE: " + p1.getScore());
+                        } else if ((Integer) inObj == 0){
+                            System.out.println("FEL");
+                            System.out.println("P1 SCORE: " + p1.getScore());
+                        }
+                        //System.out.println("questions == inputQuestions");
                         questions = 0;
                         state = PLAYER_TWO_QUESTION;
+                        processedObject = p1.getScore();
                         server.setCurrentPlayer(p2);
-                        System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
-                        System.out.println("Questions set at: " + questions);
-                        processedObject = 3;
-                        System.out.println("processedQuestion is: " + questionsForThisGame.get(questions).getQuestion());
+                        //System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
+                        //System.out.println("Questions set at: " + questions);
+                        //System.out.println("processedQuestion is: " + questionsForThisGame.get(questions).getQuestion());
                         if (categories == inputCategories){
-                            System.out.println("categories == inputCategories");
+                            //System.out.println("categories == inputCategories");
                             processedObject = 3;
                             state = GAME_END;
-                            System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
+                            //System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
                             questions = 0;
                         }
 
@@ -153,15 +160,18 @@ public class TestProtocol {
                  */
 
                         if ((Integer) inObj == 1){
+                            p1.setScore(p1.getScore() +1 );
                             System.out.println("RÄTT");
+                            System.out.println("P1 SCORE: " + p1.getScore());
                         } else if ((Integer) inObj == 0){
                             System.out.println("FEL");
+                            System.out.println("P1 SCORE: " + p1.getScore());
                         }
-                        System.out.println("Fråga nr " + questions);
-                        System.out.println("Vi är i questions < inputQuestions");
+                        //System.out.println("Fråga nr " + questions);
+                        //System.out.println("Vi är i questions < inputQuestions");
                         processedObject = questionsForThisGame.get(questions);
-                        System.out.println("processedQuestion is: " + questionsForThisGame.get(questions).getQuestion());
-                        System.out.println("P1 Question number" + questions);
+                        //System.out.println("processedQuestion is: " + questionsForThisGame.get(questions).getQuestion());
+                        //System.out.println("P1 Question number" + questions);
                         questions++;
                     }
                 } else if (inObj instanceof String) {
@@ -185,8 +195,8 @@ public class TestProtocol {
                     processedObject = questionsForThisGame.get(questions);
                     questions++;
 
-                    System.out.println("P2 Question number " + questions);
-                    System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
+                    //System.out.println("P2 Question number " + questions);
+                    //System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
                     state = PLAYER_TWO_QUESTION;
 
                     categories++;
@@ -198,52 +208,58 @@ public class TestProtocol {
                 }
                 state = PLAYER_TWO_QUESTION;
                 if (inObj instanceof Integer){
-                    System.out.println("P2 CATEGORY FICK IN EN INT");
+                    //System.out.println("P2 CATEGORY FICK IN EN INT");
                     state = PLAYER_TWO_CHOOSE_CATEGORY;
                 }
-                System.out.println("P2 QUESTION COUNTER: " + questions);
+                //System.out.println("P2 QUESTION COUNTER: " + questions);
             }
             case PLAYER_TWO_QUESTION -> {
                 if (inObj instanceof Integer){
 
                     if (questions == inputQuestions){
                         if ((Integer) inObj == 1){
+                            p2.setScore(p2.getScore() +1 );
                             System.out.println("RÄTT");
+                            System.out.println("P2 SCORE: " + p2.getScore());
                         } else if ((Integer) inObj == 0){
                             System.out.println("FEL");
+                            System.out.println("P2 SCORE: " + p2.getScore());
                         }
-                        System.out.println("Fråga nr " + questions);
-                        System.out.println("questions == inputQuestions");
+                        //System.out.println("Fråga nr " + questions);
+                        //System.out.println("questions == inputQuestions");
 
                         if (categories == inputCategories){
-                            System.out.println("categories == inputCategories");
-                            processedObject = 3;
+                            //System.out.println("categories == inputCategories");
+                            processedObject = p2.getScore();
                             server.setCurrentPlayer(p1);
-                            System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
+                            //System.out.println("Current player set as: " + server.currentPlayer.getClientUsername());
                             questions = 0;
                             state = PLAYER_ONE_QUESTION;
                         }
                         if (categories < inputCategories) {
-                            System.out.println("categories < inputCategories");
+                            //System.out.println("categories < inputCategories");
                             state = PLAYER_TWO_CHOOSE_CATEGORY;
                             questions = 0;
-                            System.out.println("Questions set at: " + questions);
+                            //System.out.println("Questions set at: " + questions);
                             processedObject = server.getListOfCategories();
                         }
 
 
 
                     } else if (questions < inputQuestions){
-                        System.out.println("I player2 andra else if");
+                        //System.out.println("I player2 andra else if");
                         if ((Integer) inObj == 1){
+                            p2.setScore(p2.getScore() +1 );
                             System.out.println("RÄTT");
+                            System.out.println("P2 SCORE: " + p2.getScore());
                         } else if ((Integer) inObj == 0){
                             System.out.println("FEL");
+                            System.out.println("P2 SCORE: " + p2.getScore());
                         }
-                        System.out.println("Fråga nr " + questions);
-                        System.out.println("Vi är i questions < inputQuestions");
+                        //System.out.println("Fråga nr " + questions);
+                        //System.out.println("Vi är i questions < inputQuestions");
                         processedObject = questionsForThisGame.get(questions);
-                        System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
+                        //System.out.println("processedObject is: " + questionsForThisGame.get(questions).getQuestion());
                         questions++;
 
 
@@ -253,7 +269,7 @@ public class TestProtocol {
                     questions++;
                 }
 
-                System.out.println("P2 QUESTION COUNTER: " + questions);
+                //System.out.println("P2 QUESTION COUNTER: " + questions);
             }
             case GAME_END -> {
                 gameEnd = true;
