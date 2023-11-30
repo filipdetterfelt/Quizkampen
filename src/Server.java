@@ -34,49 +34,58 @@ public class Server extends Thread{
                 currentPlayer.getOutputStream().writeObject(tp.process(listOfCategories));
                 while(true) {
                 if (currentPlayer == p1) {
-                    System.out.println("Inside p1 loop");
+                    //System.out.println("Inside p1 loop");
                     objectCounter = 0;
 
                     while ((fromPLayer = p1.getInputStream().readObject()) != null) {
                         if (fromPLayer instanceof Boolean) {
-                            p2.getOutputStream().writeObject(4);
-                            p1.getOutputStream().writeObject(4);
+                            System.out.println("försöker skriva bool");
+                            p2.getOutputStream().writeObject(fromPLayer);
+                            System.out.println("p2 bool ");
+
+                            p1.getOutputStream().writeObject(fromPLayer);
+                            System.out.println("p1 bool ");
+
                             break;
                         }
                         objectCounter++;
-                        System.out.println("Object counter: " + objectCounter);
+                        //System.out.println("Object counter: " + objectCounter);
                         if (currentPlayer != p1) {
-                            System.out.println("breaking out of loop");
+                            //System.out.println("breaking out of loop");
                             p2.getOutputStream().writeObject(tp.process(fromPLayer));
-                            System.out.println("p2 sent: " + fromPLayer);
+                            //System.out.println("p2 sent: " + fromPLayer);
                             break;
                         }
-                        System.out.println("Sending new object to process: " + fromPLayer);
+                        //System.out.println("Sending new object to process: " + fromPLayer);
                         p1.getOutputStream().writeObject(tp.process(fromPLayer));
                     }
                 } else if (currentPlayer == p2) {
-                    System.out.println("Inside p2 loop");
+                    //System.out.println("Inside p2 loop");
                     objectCounter = 0;
 
                     while ((fromPLayer = p2.getInputStream().readObject()) != null) {
 
-                        System.out.println("Fromplayer: " + fromPLayer);
+                       //System.out.println("Fromplayer: " + fromPLayer);
+
                         if (fromPLayer instanceof Boolean) {
-                            p2.getOutputStream().writeObject(4);
-                            p1.getOutputStream().writeObject(4);
+                            System.out.println("försöker skriva bool");
+                            p2.getOutputStream().writeObject(fromPLayer);
+                            System.out.println("p2 bool ");
+                            p1.getOutputStream().writeObject(fromPLayer);
+                            System.out.println("p1 bool");
                             break;
                         }
                         objectCounter++;
-                        System.out.println("Object counter: " + objectCounter);
+                        //System.out.println("Object counter: " + objectCounter);
                         if (currentPlayer != p2) {
-                            System.out.println("breaking out of loop");
+                            //System.out.println("breaking out of loop");
                             p1.getOutputStream().writeObject(tp.process(fromPLayer));
-                            System.out.println("p1 sent: " + fromPLayer);
+                            //System.out.println("p1 sent: " + fromPLayer);
                             break;
                         }
-                        System.out.println("Sending new object to process: " + fromPLayer);
-
+                        //System.out.println("Sending new object to process: " + fromPLayer);
                         p2.getOutputStream().writeObject(tp.process(fromPLayer));
+
                     }
 
                     }
