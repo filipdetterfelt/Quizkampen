@@ -54,6 +54,7 @@ public class Client {
                         scoreList.add((Integer) ((List<?>) tempObject).get(0));
                         scoreList.add((Integer) ((List<?>) tempObject).get(1));
                         g.drawWaitingForOpponentScreen(scoreList);
+                        out.writeObject("testString");
                     } else if (isListOfString(tempList)){
                         System.out.println("Fick en lista med string");
                         cat1 = (String) tempList.get(0);
