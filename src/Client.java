@@ -45,6 +45,7 @@ public class Client {
 
                 //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
                 if (tempObject instanceof List<?>){
+                    Thread.sleep(1000);
                     tempList.add((String) ((List<?>) tempObject).get(0));
                     tempList.add((String) ((List<?>) tempObject).get(1));
                     cat1 = tempList.get(0);
@@ -55,6 +56,7 @@ public class Client {
   
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
+                    Thread.sleep(1000);
                     tempQ = (Question) tempObject;
                     System.out.println("Client fick fråga: " + tempQ.getQuestion());
                     g.drawQuestionsScreen(tempQ);
@@ -73,6 +75,7 @@ public class Client {
                     g.drawEndScreen();
                 }
                 else if (tempObject instanceof Integer) {
+                    Thread.sleep(1000);
                     int tempInt = (Integer) tempObject;
                     if(tempInt == 4){
                         g.drawResultScreen(5,5);
@@ -97,6 +100,8 @@ public class Client {
             e.printStackTrace();
         } catch (IOException e){
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
