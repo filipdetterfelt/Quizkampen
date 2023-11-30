@@ -1,9 +1,7 @@
 package QuestionManager;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
+
 /**
     QuestionManager-class
     QuestionManager functions as a ViewModel/Controller for the QuestionDatabase,
