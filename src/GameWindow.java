@@ -61,8 +61,9 @@ public class GameWindow extends JFrame implements ActionListener{
     JButton playAgain = new JButton("Spela igen   ");
     JButton exitGame = new JButton("Avsluta spelet");
     JLabel exit = new JLabel("Spelet är avslutat");
-    JLabel pointsP1 = new JLabel();
-    JLabel pointsP2 = new JLabel();
+    JLabel player1NameAndScore = new JLabel();
+    JLabel player2NameAndScore = new JLabel();
+
     String userInput = null;
     JLabel userName;
     Client c = new Client();
@@ -252,7 +253,7 @@ public class GameWindow extends JFrame implements ActionListener{
         setResizable(false);
     }
 
-    public void drawEndScreen() {
+    public void drawEndScreen(ClientHandler p1, ClientHandler p2) {
         clearFrame(scorePanel);
         clearFrame(questionsPanel);
         clearFrame(waitingForOpponentPanel);
@@ -267,13 +268,14 @@ public class GameWindow extends JFrame implements ActionListener{
         southPanel.add(playAgain);
         southPanel.add(exitGame);
         centerPanel.add(exit);
-
+        player1NameAndScore.setText(p1.getClientUsername() + " " + p1.getScore() + " poäng");
+        player2NameAndScore.setText(p2.getClientUsername() + " " + p2.getScore() + " poäng");
+        centerPanel.add(player1NameAndScore);
+        centerPanel.add(player2NameAndScore);
 
         centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,200));
         exit.setFont(new Font("Arial",Font.BOLD,40));
         centerPanel.add(exit);
-
-
 
         revalidate();
         repaint();

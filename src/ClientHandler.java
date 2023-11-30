@@ -1,16 +1,17 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable, Serializable {
 
-    public static List<ClientHandler> clientHandlers = new ArrayList<>();
-    private Socket socket;
-    private ObjectInputStream inputStream;
-    private ObjectOutputStream outputStream;
+    public List<ClientHandler> clientHandlers = new ArrayList<>();
+    private transient Socket socket;
+    private transient ObjectInputStream inputStream;
+    private transient ObjectOutputStream outputStream;
     private String clientUsername;
     private int score;
     int pointsPerGame;
@@ -39,7 +40,8 @@ public class ClientHandler implements Runnable{
             System.out.println(clientUsername + " has connected");
 
         } catch (IOException e){
-            closeEverything(socket,inputStream,outputStream);
+            //closeEverything(socket,inputStream,outputStream);
+            System.out.println("IOEXCEPTION");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +62,7 @@ public class ClientHandler implements Runnable{
     public String getClientUsername() {
         return clientUsername;
     }
-
+    /*
     public void broadcastMessage(Object messageToSend){
         try {
             outputStream.writeObject(messageToSend);
@@ -94,10 +96,7 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    public static List<ClientHandler> getClientHandlers() {
-        return clientHandlers;
-    }
-
+     */
     public ObjectInputStream getInputStream() {
         return inputStream;
     }
