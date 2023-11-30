@@ -19,7 +19,7 @@ public class Client {
     Question tempQ;
     int score;
     boolean isFinnished = false;
-    private static int PORT = 55555;
+    private static int PORT = 55556;
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;
@@ -46,7 +46,7 @@ public class Client {
 
                 //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
                 if (tempObject instanceof List<?>){
-
+                    Thread.sleep(1000);
                     tempList.add(((List<?>) tempObject).get(0));
                     tempList.add(((List<?>) tempObject).get(1));
 
@@ -63,7 +63,7 @@ public class Client {
                         g.drawCategoryScreen(cat1,cat2);
                     } else System.out.println("Tom lista, nåt är fel");
 
-                    Thread.sleep(1000);
+
 
                     //System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
@@ -86,7 +86,8 @@ public class Client {
                 else if (tempObject instanceof Boolean){
                     System.out.println("Drawing endScreen");
 
-                    g.drawEndScreen();
+                     g.drawEndScreen();
+
                 }
                 else if (tempObject instanceof Integer) {
                     Thread.sleep(1000);
