@@ -55,6 +55,8 @@ public class TestProtocol {
         this.server = server;
         this.p1 = p1;
         this.p2 = p2;
+        scoreBoard.add(0,0);
+        scoreBoard.add(1,0);
     }
 
 
@@ -80,8 +82,6 @@ public class TestProtocol {
                     state = PLAYER_ONE_CHOOSE_CATEGORY;
                 }
 
-                scoreBoard.add(0,0);
-                scoreBoard.add(1,0);
             }
 
             case PLAYER_ONE_CHOOSE_CATEGORY -> {
@@ -142,6 +142,8 @@ public class TestProtocol {
                                 questions = 0;
                                 state = PLAYER_TWO_QUESTION;
                             } else {
+                                System.out.println("I set game end");
+                                processedObject = scoreBoard;
                                 state = GAME_END;
                             }
                         }
@@ -279,11 +281,14 @@ public class TestProtocol {
 
             case GAME_END -> {
                 gameEnd = true;
+                processedObject = scoreBoard;
                 processedObject = gameEnd;
                 server.endGame();
 
             }
         }
+        System.out.println("Score board: " + scoreBoard);
+        System.out.println("Process returned: " + processedObject);
         return processedObject;
     }
 }
