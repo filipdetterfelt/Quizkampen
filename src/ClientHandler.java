@@ -12,10 +12,19 @@ public class ClientHandler implements Runnable{
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private String clientUsername;
+    private int score;
     int pointsPerGame;
 
     public void setPointsPerGame(int pointsPerGame) {
         this.pointsPerGame = pointsPerGame;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     int totalPoints;

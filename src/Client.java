@@ -17,7 +17,8 @@ public class Client {
     ObjectOutputStream out;
     ObjectInputStream in;
     Question tempQ;
-    private static int PORT = 55555;
+    int score;
+    boolean isFinnished = false;
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;
@@ -35,6 +36,8 @@ public class Client {
             String tempString;
             List<String> tempList = new ArrayList<>();
             String cat1 = null, cat2 = null;
+            int answeredQuestions = 0;
+
 
             while ((tempObject = in.readObject()) != null) {
                 System.out.println("Klient mottagit object: " + tempObject);
@@ -45,7 +48,7 @@ public class Client {
                     tempList.add((String) ((List<?>) tempObject).get(1));
                     cat1 = tempList.get(0);
                     cat2 = tempList.get(1);
-                    System.out.println("Tog emot lista med kategorier");
+                    //System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
                     g.drawCategoryScreen(cat1,cat2);
   
@@ -54,15 +57,38 @@ public class Client {
                     tempQ = (Question) tempObject;
                     System.out.println("Client fick fråga: " + tempQ.getQuestion());
                     g.drawQuestionsScreen(tempQ);
-                } else if (tempObject instanceof Integer) {
+
+                   //Lägger till answeredQuestions med 1 för varje besvarad fråga
+                    answeredQuestions++;
+                    System.out.println("answeredQuestion = "+answeredQuestions);
+
+                    //Om antal besvarade frågor är rätt antal så ritas endScreen ut
+
+
+                }
+                else if (tempObject instanceof Boolean){
+                    System.out.println("Drawing endScreen");
+
+                    g.drawEndScreen();
+                }
+                else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
-                    if(tempInt == 3){
+                    if(tempInt == 4){
+                        g.drawResultScreen(5,5);
+                    } else {
                         g.drawWaitingForOpponentScreen(tempInt);
                         out.writeObject("testString");
+
                         System.out.println("Test efter draw");
-                    } if(tempInt == 4){
+
+                    } /*if(tempInt == 4){
+
                         g.drawResultScreen(5,5);
-                    }
+
+                    }*/
+
+
+
                 }
             }
         } catch (EOFException e){
@@ -86,10 +112,12 @@ public class Client {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your username: ");
-        String username = scanner.nextLine();
+        String userName = null;
+        while (userName == null || userName.trim().isEmpty()){
+            userName = JOptionPane.showInputDialog(null, "Vad heter du?");
+        }
+
         Socket socket = new Socket("localhost", PORT);
-        Client client = new Client(socket,username);
+        Client client = new Client(socket,userName);
     }
 }
