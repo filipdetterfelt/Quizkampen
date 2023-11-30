@@ -35,7 +35,8 @@ public class Client {
 
             Object tempObject;
             String tempString;
-            List<String> tempList = new ArrayList<>();
+            List<Object> tempList = new ArrayList<>();
+            List<Integer> scoreList = new ArrayList<>();
             String cat1 = null, cat2 = null;
             int answeredQuestions = 0;
 
@@ -45,13 +46,25 @@ public class Client {
 
                 //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
                 if (tempObject instanceof List<?>){
-                    tempList.add((String) ((List<?>) tempObject).get(0));
-                    tempList.add((String) ((List<?>) tempObject).get(1));
-                    cat1 = tempList.get(0);
-                    cat2 = tempList.get(1);
+                    tempList.add(((List<?>) tempObject).get(0));
+                    tempList.add(((List<?>) tempObject).get(1));
+
+                    if (isListOfInteger(tempList)) {
+                        System.out.println("Fick en lista med int");
+                        scoreList.add((Integer) ((List<?>) tempObject).get(0));
+                        scoreList.add((Integer) ((List<?>) tempObject).get(1));
+                        g.drawWaitingForOpponentScreen(scoreList);
+                    } else if (isListOfString(tempList)){
+                        System.out.println("Fick en lista med string");
+                        cat1 = (String) tempList.get(0);
+                        cat2 = (String) tempList.get(1);
+                        g.drawCategoryScreen(cat1,cat2);
+                    } else System.out.println("Tom lista, nåt är fel");
+
+
                     //System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
-                    g.drawCategoryScreen(cat1,cat2);
+
   
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
@@ -65,7 +78,6 @@ public class Client {
 
                     //Om antal besvarade frågor är rätt antal så ritas endScreen ut
 
-
                 }
                 else if (tempObject instanceof Boolean){
                     System.out.println("Drawing endScreen");
@@ -75,21 +87,14 @@ public class Client {
                 else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
                     if(tempInt == 4){
-                        g.drawResultScreen(5,5);
+                        g.drawResultScreen(scoreList);
                     } else {
-                        g.drawWaitingForOpponentScreen(tempInt);
+                        //g.drawWaitingForOpponentScreen(tempInt);
                         out.writeObject("testString");
 
                         System.out.println("Test efter draw");
 
-                    } /*if(tempInt == 4){
-
-                        g.drawResultScreen(5,5);
-
-                    }*/
-
-
-
+                    }
                 }
             }
         } catch (EOFException e){
@@ -98,6 +103,13 @@ public class Client {
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public boolean isListOfString(List<Object> list){
+        return list.stream().anyMatch(type -> type instanceof String);
+    }
+    public boolean isListOfInteger(List<Object> list){
+        return list.stream().anyMatch(type -> type instanceof Integer);
     }
 
     public Socket getSocket() {

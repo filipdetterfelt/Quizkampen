@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -163,7 +164,7 @@ public class GameWindow extends JFrame implements ActionListener{
         setResizable(true);
     }
 
-    public void drawWaitingForOpponentScreen(int tempInt){
+    public void drawWaitingForOpponentScreen(List<Integer> scoreList){
         clearFrame(questionsScreenPanel);
 
         add(waitingForOpponentPanel);
@@ -181,7 +182,8 @@ public class GameWindow extends JFrame implements ActionListener{
         opponentScorePanel.add(opponentLabel);
         opponentScorePanel.add(opponentScoreLabel);
 
-        playerScoreLabel.setText(String.valueOf(tempInt));
+        playerScoreLabel.setText(String.valueOf(scoreList.get(0)));
+        opponentScoreLabel.setText(String.valueOf(scoreList.get(1)));
         revalidate();
         repaint();
         setTitle("Quizkampen");
@@ -192,7 +194,7 @@ public class GameWindow extends JFrame implements ActionListener{
         setResizable(false);
     }
 
-    public void drawResultScreen(int playerPoints, int opponentPoints){
+    public void drawResultScreen(List<Integer> scoreBoard){
         add(scorePanel);
 
         scorePanel.add(playerCenterPanel);
@@ -203,6 +205,9 @@ public class GameWindow extends JFrame implements ActionListener{
         opponentCenterPanel.add(opponentScorePanel);
         opponentScorePanel.add(opponentLabel);
         opponentScorePanel.add(opponentScoreLabel);
+
+        playerScoreLabel.setText(String.valueOf(scoreBoard.get(0)));
+        opponentScoreLabel.setText(String.valueOf(scoreBoard.get(1)));
 
         revalidate();
         repaint();
