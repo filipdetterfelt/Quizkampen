@@ -21,7 +21,7 @@ public class Client {
     Question tempQ;
     int score;
     boolean isFinnished = false;
-    private static int PORT = 55556;
+    private static int PORT = 55557;
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;
