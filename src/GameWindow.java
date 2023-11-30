@@ -61,7 +61,8 @@ public class GameWindow extends JFrame implements ActionListener{
     JButton playAgain = new JButton("Spela igen   ");
     JButton exitGame = new JButton("Avsluta spelet");
     JLabel exit = new JLabel("Spelet är avslutat");
-
+    JLabel pointsP1 = new JLabel();
+    JLabel pointsP2 = new JLabel();
     String userInput = null;
     JLabel userName;
     Client c = new Client();
@@ -267,9 +268,12 @@ public class GameWindow extends JFrame implements ActionListener{
         southPanel.add(exitGame);
         centerPanel.add(exit);
 
+
         centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,200));
         exit.setFont(new Font("Arial",Font.BOLD,40));
         centerPanel.add(exit);
+
+
 
         revalidate();
         repaint();
