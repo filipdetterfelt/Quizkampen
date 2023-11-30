@@ -59,8 +59,6 @@ public class Server extends Thread{
                     objectCounter = 0;
 
                     while ((fromPLayer = p2.getInputStream().readObject()) != null) {
-
-                        System.out.println("Fromplayer: " + fromPLayer);
                         if (fromPLayer instanceof Boolean) {
                             p2.getOutputStream().writeObject(4);
                             p1.getOutputStream().writeObject(4);
