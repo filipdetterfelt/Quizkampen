@@ -15,7 +15,8 @@ public class Client {
     ClientHandler player;
     ClientHandler opponent;
     Question tempQ;
-    private static int PORT = 55556;
+    private static int PORT = 55555;
+
 
     /*
     Klienten skapas upp med angivet användarnamn, och vi skapar upp våra in & output streams.
@@ -60,6 +61,7 @@ public class Client {
                     Thread.sleep(1000);
                     tempList.set(0,((List<?>) tempObject).get(0));
                     tempList.set(1,((List<?>) tempObject).get(1));
+
 
                     if (isListOfInteger(tempList)) {
                         scoreList.set(0,(Integer) ((List<?>) tempObject).get(0));
