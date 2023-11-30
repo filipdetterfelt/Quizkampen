@@ -5,20 +5,23 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Client {
-
-    public Client() {
-    }
-
+    public Client() {}
     Socket socket;
     String username;
     ObjectOutputStream out;
     ObjectInputStream in;
+    ClientHandler player;
+    ClientHandler opponent;
     Question tempQ;
     private static int PORT = 55555;
 
+
+    /*
+    Klienten skapas upp med angivet användarnamn, och vi skapar upp våra in & output streams.
+    Sedan skapar vi upp ett nytt GameWindow med denna klient samt output stream som inparameter.
+     */
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;
         this.username = username;
@@ -28,68 +31,113 @@ public class Client {
         try
 
         {
+            //Skickar användarnamnet till sin ClientHandler & ritar upp startskärmen med användarnamnet
             out.writeObject(username);
             g.drawStartScreen(username);
 
+            //Används för att hantera inkommande objekt och listor av okända object
             Object tempObject;
-            String tempString;
-            List<String> tempList = new ArrayList<>();
+            List<Object> tempList = new ArrayList<>(2);
+
+            //Initierar våra listor och variabler som vi behöver komma åt
+            List<Integer> scoreList = new ArrayList<>();
             String cat1 = null, cat2 = null;
+            scoreList.add(0,0);
+            scoreList.add(1,0);
+            tempList.add(0,0);
+            tempList.add(0,0);
 
+
+
+            //Här ligger vi och lyssnar och väntar på att få in ett objekt
             while ((tempObject = in.readObject()) != null) {
-                System.out.println("Klient mottagit object: " + tempObject);
 
-                //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
+                /*
+                Om objektet vi fått in är en lista, då följer vi nedan if-sats.
+                Vi har här inne ytterligare if-satser som anropar på metoder som returnerar
+                en bool. Dessa metoder kollar vad för object listan innehåller.
+                 */
                 if (tempObject instanceof List<?>){
-                    tempList.add((String) ((List<?>) tempObject).get(0));
-                    tempList.add((String) ((List<?>) tempObject).get(1));
-                    cat1 = tempList.get(0);
-                    cat2 = tempList.get(1);
-                    System.out.println("Tog emot lista med kategorier");
-                    //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
-                    g.drawCategoryScreen(cat1,cat2);
-  
-                //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
-                } else if (tempObject instanceof Question) {
-                    tempQ = (Question) tempObject;
-                    System.out.println("Client fick fråga: " + tempQ.getQuestion());
-                    g.drawQuestionsScreen(tempQ);
-                } else if (tempObject instanceof Integer) {
-                    int tempInt = (Integer) tempObject;
-                    if(tempInt == 3){
-                        g.drawWaitingForOpponentScreen(tempInt);
+                    Thread.sleep(1000);
+                    tempList.set(0,((List<?>) tempObject).get(0));
+                    tempList.set(1,((List<?>) tempObject).get(1));
+
+
+                    if (isListOfInteger(tempList)) {
+                        scoreList.set(0,(Integer) ((List<?>) tempObject).get(0));
+                        scoreList.set(1,(Integer) ((List<?>) tempObject).get(1));
+                        g.drawWaitingForOpponentScreen(scoreList);
                         out.writeObject("testString");
-                        System.out.println("Test efter draw");
-                    } if(tempInt == 4){
-                        g.drawResultScreen(5,5);
+
+                    } else if (isListOfString(tempList)){
+                        cat1 = (String) tempList.get(0);
+                        cat2 = (String) tempList.get(1);
+                        g.drawCategoryScreen(cat1,cat2);
+
+                    } else if (isListOfPlayers(tempList)){
+                        player = (ClientHandler) tempList.get(0);
+                        opponent = (ClientHandler) tempList.get(1);
+                    }
+
+                /*
+                Om objektet vi fått in är en fråga, så plockar vi ut den, kastar om den till ett
+                Question object och ritar upp frågeskärmen som tar in den frågan som inparameter.
+                 */
+                } else if (tempObject instanceof Question) {
+                    Thread.sleep(1000);
+                    tempQ = (Question) tempObject;
+                    g.drawQuestionsScreen(tempQ);
+                }
+                /*
+                Om objektet vi fått in är en bool, så vet vi att det är spelet som avslutats,
+                så då ritar vi upp våran slutskärm, med de två Clienthandlers (spelare) som spelat
+                som inparameter.
+                 */
+                else if (tempObject instanceof Boolean){
+                    g.drawEndScreen(player,opponent);
+                }
+                /*
+                Om objektet vi fått in är en Integer, så vet vi att vi ska rita upp resultatskärmen, med
+                de två spelarnas poäng på för varje rond.
+                 */
+                else if (tempObject instanceof Integer) {
+                    Thread.sleep(1000);
+                    int tempInt = (Integer) tempObject;
+                    if(tempInt == 4){
+                        g.drawResultScreen(scoreList);
                     }
                 }
             }
         } catch (EOFException e){
-            System.out.println("Slutet av filen");
-            e.printStackTrace();
+            System.out.println("EOFException hos Client");
         } catch (IOException e){
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public Socket getSocket() {
-        return socket;
+    /*
+    Här nedan följer de tre metoder som kollar av vad för typ av objekt våra inkommande listor
+    består utav. De kollar alltså på varje element i listan, och kollar om dom är respektive typer
+    av objekt.
+     */
+    public boolean isListOfString(List<Object> list){
+        return list.stream().anyMatch(type -> type instanceof String);
     }
-
-    public ObjectOutputStream getOut() {
-        return out;
+    public boolean isListOfInteger(List<Object> list){
+        return list.stream().anyMatch(type -> type instanceof Integer);
     }
-
-    public ObjectInputStream getIn() {
-        return in;
+    public boolean isListOfPlayers(List<Object> list) {
+        return list.stream().anyMatch(type -> type instanceof ClientHandler);
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your username: ");
-        String username = scanner.nextLine();
+        String userName = null;
+        while (userName == null || userName.trim().isEmpty()){
+            userName = JOptionPane.showInputDialog(null, "Användarnamn?");
+        }
         Socket socket = new Socket("localhost", PORT);
-        Client client = new Client(socket,username);
+        Client client = new Client(socket,userName);
     }
 }

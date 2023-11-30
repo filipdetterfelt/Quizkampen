@@ -4,8 +4,14 @@ import java.net.ServerSocket;
 
 public class ServerListener {
 
+    //Konstruktor
+    //Använder try with resourches för att socketen vi skapar ska stängas autmoatiskt
+    //While loop där vi skapar upp olika instanser , samt startar 2 trådar (clienth)
+    //Server instans samt starta tråd
+
+    //sout för skriva ut
     public ServerListener(){
-        try(ServerSocket ss = new ServerSocket(55555)){
+        try(ServerSocket ss = new ServerSocket(55557)){
             while (true){
                 ClientHandler clientHandler = new ClientHandler(ss.accept());
                 Thread thread1 = new Thread(clientHandler);
@@ -18,7 +24,7 @@ public class ServerListener {
                 Server server = new Server(clientHandler, clientHandler2);
                 server.start();
             }
-
+        //Hanterar endoffile och IOE exep..
         } catch (EOFException e){
             System.out.println("Slutet av filen");
         } catch (IOException e){
@@ -26,7 +32,7 @@ public class ServerListener {
         }
     }
 
-
+//Instans i main för o köra
     public static void main(String[] args) throws IOException {
         ServerListener serverListener = new ServerListener();
     }

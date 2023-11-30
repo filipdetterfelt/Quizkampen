@@ -1,94 +1,61 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable, Serializable {
 
-    public static List<ClientHandler> clientHandlers = new ArrayList<>();
-    private Socket socket;
-    private ObjectInputStream inputStream;
-    private ObjectOutputStream outputStream;
+    /*
+    ClientHandler är både Runnable och Serializable.
+    Den är Runnable så våra instanser kan köras på varsin tråd när vi skapar upp
+    dom i ServerListener.
+    Den är Serializable så vi kan skicka och ta emot en ClientHandler via våra
+    input & output streams.
+
+    Notera att våran Socket samt streams är satta som "transient", som gör att dessa fält hoppas över
+    när vi ska serialisera detta objekt. Annars kan vi inte skicka objektet då de inte kan serialiseras.
+     */
+    private transient Socket socket;
+    private transient ObjectInputStream inputStream;
+    private transient ObjectOutputStream outputStream;
     private String clientUsername;
-    int pointsPerGame;
+    private int score;
 
-    public void setPointsPerGame(int pointsPerGame) {
-        this.pointsPerGame = pointsPerGame;
-    }
-
-    int totalPoints;
-
+    /*
+    Här initierar vi våra fält i en try sats.
+    Samt att vi här läser in clientUsername, som klienten skickar när det skapas upp.
+     */
     public ClientHandler(Socket socket){
         try{
             this.socket = socket;
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
-            clientHandlers.add(this);
             this.clientUsername = (String) inputStream.readObject();
-            System.out.println(clientUsername + " has connected");
-
         } catch (IOException e){
-            closeEverything(socket,inputStream,outputStream);
+            System.out.println("IO EXCEPTION at ClientHandler constructor");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-
-    public ClientHandler() {
-    }
-
     @Override
-    public void run() {
-        
-    }
-    public Socket getSocket() {
-        return socket;
-    }
+    public void run() {}
 
+    /*
+    Sedan följer getters och setters för åtkomst från Server, Protocol samt GameWindow klasserna
+     */
     public String getClientUsername() {
         return clientUsername;
     }
 
-    public void broadcastMessage(Object messageToSend){
-        try {
-            outputStream.writeObject(messageToSend);
-        }catch (IOException e){
-            e.printStackTrace();
-            System.out.println("BLÄ");
-        }
-
-
+    public int getScore() {
+        return score;
     }
 
-    public void removeClientHandler(){
-        clientHandlers.remove(this);
-        broadcastMessage("SERVER: " + clientUsername + " has left the chat");
+    public void setScore(int score) {
+        this.score = score;
     }
-
-    public void closeEverything(Socket socket, ObjectInputStream inputStream, ObjectOutputStream outputStream){
-        removeClientHandler();
-        try {
-            if (inputStream != null){
-                inputStream.close();
-            }
-            if (outputStream != null){
-                outputStream.close();
-            }
-            if (socket != null){
-                socket.close();
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    public static List<ClientHandler> getClientHandlers() {
-        return clientHandlers;
-    }
-
     public ObjectInputStream getInputStream() {
         return inputStream;
     }

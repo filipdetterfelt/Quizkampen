@@ -1,6 +1,7 @@
 package QuestionManager;
 
 import java.io.Serializable;
+
 /**
     Question-class
     Question object that contains a question, a String-array with answer-options and a correct answer index.
