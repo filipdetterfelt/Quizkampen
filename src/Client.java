@@ -21,7 +21,7 @@ public class Client {
     Question tempQ;
     int score;
     boolean isFinnished = false;
-    private static int PORT = 55556;
+    private static int PORT = 55557;
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;
@@ -59,6 +59,7 @@ public class Client {
                     Thread.sleep(1000);
 
                     tempList.set(0,((List<?>) tempObject).get(0));
+                    tempList.set(1,((List<?>) tempObject).get(1));
 
 
                     if (isListOfInteger(tempList)) {

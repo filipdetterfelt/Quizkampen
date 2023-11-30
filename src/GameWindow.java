@@ -265,16 +265,18 @@ public class GameWindow extends JFrame implements ActionListener{
         endScreen.add(centerPanel, BorderLayout.CENTER);
         endScreen.add(northPanel, BorderLayout.NORTH);
         endScreen.add(southPanel, BorderLayout.SOUTH);
-        southPanel.add(playAgain);
+
         southPanel.add(exitGame);
         centerPanel.add(exit);
-        player1NameAndScore.setText(p1.getClientUsername() + " " + p1.getScore() + " poäng");
-        player2NameAndScore.setText(p2.getClientUsername() + " " + p2.getScore() + " poäng");
+        player1NameAndScore.setText("Spelare: "+p1.getClientUsername() + " " + p1.getScore() + " poäng");
+        player2NameAndScore.setText("Spelare: "+p2.getClientUsername() + " " + p2.getScore() + " poäng");
         centerPanel.add(player1NameAndScore);
         centerPanel.add(player2NameAndScore);
 
-        centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,200));
+        centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,50));
         exit.setFont(new Font("Arial",Font.BOLD,40));
+        player1NameAndScore.setFont(new Font("Arial",Font.BOLD,25));
+        player2NameAndScore.setFont(new Font("Arial",Font.BOLD,25));
         centerPanel.add(exit);
 
         revalidate();
@@ -286,21 +288,7 @@ public class GameWindow extends JFrame implements ActionListener{
         setVisible(true);
         setResizable(false);
     }
-    public void restartGame(String username) {
-        clearFrame(endScreen);
-        clearFrame(categoryScreenPanel);
-        clearFrame(questionsScreenPanel);
-        clearFrame(scorePanel);
-        clearFrame(waitingForOpponentPanel);
-        clearFrame(startScreenPanel);
 
-        ServerListener sl = new ServerListener();
-        Client c = new Client();
-
-
-
-        drawStartScreen(username);
-    }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == answer1Btn){
@@ -338,13 +326,7 @@ public class GameWindow extends JFrame implements ActionListener{
             System.out.println("Spelet avslutas");
             System.exit(0);
         }
-        else if (e.getSource() == playAgain){
 
-            System.out.println("Spelar igen");
-
-           restartGame("Användarnamn: ");
-
-        }
     }
 
 
