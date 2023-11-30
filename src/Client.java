@@ -17,9 +17,8 @@ public class Client {
     ObjectOutputStream out;
     ObjectInputStream in;
     Question tempQ;
-    private static int PORT = 55556;
+    int score;
     boolean isFinnished = false;
-
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;
@@ -49,7 +48,7 @@ public class Client {
                     tempList.add((String) ((List<?>) tempObject).get(1));
                     cat1 = tempList.get(0);
                     cat2 = tempList.get(1);
-                    System.out.println("Tog emot lista med kategorier");
+                    //System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
                     g.drawCategoryScreen(cat1,cat2);
   
@@ -74,9 +73,12 @@ public class Client {
                 }
                 else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
-                    if(tempInt == 3){
+                    if(tempInt == 4){
+                        g.drawResultScreen(5,5);
+                    } else {
                         g.drawWaitingForOpponentScreen(tempInt);
                         out.writeObject("testString");
+
                         System.out.println("Test efter draw");
 
                     } /*if(tempInt == 4){
@@ -84,6 +86,7 @@ public class Client {
                         g.drawResultScreen(5,5);
 
                     }*/
+
 
 
                 }

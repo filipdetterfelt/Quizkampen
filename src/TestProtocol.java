@@ -87,6 +87,7 @@ public class TestProtocol {
                     till klienten, och adderar frågorna som skickats med 1. Sedan byter vi state till PLAYER_ONE_QUESTION
                     för att hantera de integer som kommer som svar.
                  */
+
                 if (rounds % 2 != 0) {
                     state = PLAYER_ONE_QUESTION;
                 } // vi kollar om antalet rundor är ojämnt, då betyder det att det är p1:s tur att svara på p2:s frågor så då byter vi state
@@ -96,6 +97,7 @@ public class TestProtocol {
                     processedObject = questionsForThisGame.get(questions);
                     questions++;
                     categories++;
+
                 }
                 state = PLAYER_ONE_QUESTION;
             }
@@ -108,10 +110,21 @@ public class TestProtocol {
                  */
                 if (inObj instanceof Integer) {
                     if (questions == inputQuestions) {
-                        rounds++;
-                        if ((Integer) inObj == 1) {
-                        } else if ((Integer) inObj == 0) {
+                 /*
+                    Är questions == inputQuestions, så har klient 1 nu svarat på sina frågor, och vi vill då sätta
+                    currentPlayer hos servern till klient 2. Sedan returnerar vi en 3'a, så klienten ritar upp sin
+                    waitScreen med sina poäng. Vi sätter också state till PLAYER_TWO_QUESTION.
+                 */
+                if ((Integer) inObj == 1){
+                            p1.setScore(p1.getScore() +1 );
+                            System.out.println("RÄTT");
+                            System.out.println("P1 SCORE: " + p1.getScore());
+                        } else if ((Integer) inObj == 0){
+                            System.out.println("FEL");
+                            System.out.println("P1 SCORE: " + p1.getScore());
                         }
+                        //System.out.println("questions == inputQuestions");
+                        processedObject = p1.getScore();
                         // om alla kategorier är gjorda men vi är på ojämnt antal rundor går vi över till p2 som ska svara på p1:s frågor,
                         // annars går vi vidare till game end state
                         if (categories == inputCategories) {
@@ -139,12 +152,20 @@ public class TestProtocol {
                         }
 
                     } else if (questions < inputQuestions) {
-                    // Är question < inputQuestions så ska klient 1 svara på fler frågor. Vi kontrollerar om vi fick rätt eller fel svar (1, 0),
-                    // och sedan returnerar vi nästa fråga till klienten och sätter questions ++;
-                        if ((Integer) inObj == 1) { // Räkna poäng
-                        } else if ((Integer) inObj == 0) {
+                      /*
+                    Är question < inputQuestions så ska klient 1 svara på fler frågor.
+                    Vi kontrollerar om vi fick rätt eller fel svar (1, 0), och sedan returnerar vi nästa fråga
+                    till klienten och sätter questions ++;
+                 */
+
+                        if ((Integer) inObj == 1){
+                            p1.setScore(p1.getScore() +1 );
+                            System.out.println("RÄTT");
+                            System.out.println("P1 SCORE: " + p1.getScore());
+                        } else if ((Integer) inObj == 0){
+                            System.out.println("FEL");
+                            System.out.println("P1 SCORE: " + p1.getScore());
                         }
-                        processedObject = questionsForThisGame.get(questions);
                         questions++;
                     }
                 } else if (inObj instanceof String) {
@@ -171,9 +192,11 @@ public class TestProtocol {
                     processedObject = tempCategoryList;
                 }
                 state = PLAYER_TWO_QUESTION;
+
                 if (inObj instanceof Integer) {
                     state = PLAYER_TWO_CHOOSE_CATEGORY;
                 }
+
             }
 
             case PLAYER_TWO_QUESTION -> {
@@ -183,16 +206,23 @@ public class TestProtocol {
                     currentPlayer hos servern. Sedan returnerar vi första frågan som klient 2 svarat på. Denna går då till klient 1.
                  */
                 if (inObj instanceof Integer) {
+                  
                     if (questions == inputQuestions) {
                         rounds++;
-                        if ((Integer) inObj == 1) {
-                        } else if ((Integer) inObj == 0) {
+                      if ((Integer) inObj == 1){
+                            p2.setScore(p2.getScore() +1 );
+                            System.out.println("RÄTT");
+                            System.out.println("P2 SCORE: " + p2.getScore());
+                        } else if ((Integer) inObj == 0){
+                            System.out.println("FEL");
+                            System.out.println("P2 SCORE: " + p2.getScore());
                         }
+                        
                         // om alla kategorier är gjorda men vi är på ojämnt antal rundor går vi över till p1 som ska svara på p2:s frågor,
                         // annars går vi vidare till game end state
                         if (categories == inputCategories) {
                             if (rounds % 2 != 0) {
-                                processedObject = 3;
+                              processedObject = p2.getScore();
                                 server.setCurrentPlayer(p1);
                                 questions = 0;
                                 state = PLAYER_ONE_QUESTION;
@@ -216,9 +246,13 @@ public class TestProtocol {
                         // Är question < inputQuestions så ska klient 1 svara på fler frågor. Vi kontrollerar om vi fick rätt eller fel svar (1, 0),
                         // och sedan returnerar vi nästa fråga till klienten och sätter questions ++;
                     } else if (questions < inputQuestions) {
-                        if ((Integer) inObj == 1) {
-                            // här ska vi räkna poäng
-                        } else if ((Integer) inObj == 0) {
+                        if ((Integer) inObj == 1){
+                            p2.setScore(p2.getScore() +1 );
+                            System.out.println("RÄTT");
+                            System.out.println("P2 SCORE: " + p2.getScore());
+                        } else if ((Integer) inObj == 0){
+                            System.out.println("FEL");
+                            System.out.println("P2 SCORE: " + p2.getScore());
                         }
                         processedObject = questionsForThisGame.get(questions);
                         questions++;
@@ -227,6 +261,7 @@ public class TestProtocol {
                     processedObject = questionsForThisGame.get(questions);
                     questions++;
                 }
+
             }
 
             case GAME_END -> {
