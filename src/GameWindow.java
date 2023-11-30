@@ -88,6 +88,7 @@ public class GameWindow extends JFrame implements ActionListener{
         startScreenPanel.add(waitingForOpponentLabel);
 
         setTitle("Quizkampen: ");
+        startScreenPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -117,6 +118,8 @@ public class GameWindow extends JFrame implements ActionListener{
         categoryScreenPanel.setBorder(BorderFactory.createEmptyBorder(40,20,20,20));
 
         setTitle("Quizkampen");
+        categoryScreenPanel.setBackground(Color.CYAN);
+        categoryCenteringPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -158,6 +161,10 @@ public class GameWindow extends JFrame implements ActionListener{
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 40, 20));
         questionsScreenPanel.setBorder(BorderFactory.createEmptyBorder(0,20,20,20));
         setTitle("Quizkampen");
+        questionsScreenPanel.setBackground(Color.CYAN);
+        topPanel.setBackground(Color.CYAN);
+        questionCenteringPanel.setBackground(Color.CYAN);
+        questionsPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -187,6 +194,15 @@ public class GameWindow extends JFrame implements ActionListener{
         revalidate();
         repaint();
         setTitle("Quizkampen");
+        waitingForOpponentPanel.setBackground(Color.CYAN);
+        topPanel.setBackground(Color.CYAN);
+        waitingPanel.setBackground(Color.CYAN);
+        playerScorePanel.setBackground(Color.CYAN);
+        opponentCenterPanel.setBackground(Color.CYAN);
+        opponentScorePanel.setBackground(Color.CYAN);
+        playerScorePanel.setBackground(Color.CYAN);
+        scorePanel.setBackground(Color.CYAN);
+        playerCenterPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -322,10 +338,10 @@ public class GameWindow extends JFrame implements ActionListener{
     }
 
     public void resetBackgrounds(){
-        answer1Btn.setBackground(Color.GRAY);
-        answer2Btn.setBackground(Color.GRAY);
-        answer3Btn.setBackground(Color.GRAY);
-        answer4Btn.setBackground(Color.GRAY);
+        answer1Btn.setBackground(Color.WHITE);
+        answer2Btn.setBackground(Color.WHITE);
+        answer3Btn.setBackground(Color.WHITE);
+        answer4Btn.setBackground(Color.WHITE);
     }
     private void clearFrame(JPanel panel){
         this.remove(panel);
