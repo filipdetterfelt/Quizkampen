@@ -86,7 +86,8 @@ public class Client {
                 else if (tempObject instanceof Boolean){
                     System.out.println("Drawing endScreen");
 
-                    g.drawEndScreen();
+                     g.drawEndScreen();
+
                 }
                 else if (tempObject instanceof Integer) {
                     Thread.sleep(1000);
