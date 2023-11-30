@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.UIManager;
 
 
 public class GameWindow extends JFrame implements ActionListener{
@@ -66,8 +67,12 @@ public class GameWindow extends JFrame implements ActionListener{
     Client c = new Client();
 
 
+
+
+
     ObjectOutputStream out;
     public GameWindow (ObjectOutputStream o, Client c){
+
         this.out = o;
         this.c = c;
         answer1Btn.addActionListener(this);
@@ -79,6 +84,18 @@ public class GameWindow extends JFrame implements ActionListener{
         userName = new JLabel(c.username + " ");
         exitGame.addActionListener(this);
         playAgain.addActionListener(this);
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                 UnsupportedLookAndFeelException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        answer1Btn.setOpaque(true);
+        answer2Btn.setOpaque(true);
+        answer3Btn.setOpaque(true);
+        answer4Btn.setOpaque(true);
     }
 
     public void drawStartScreen(String username){
@@ -307,6 +324,7 @@ public class GameWindow extends JFrame implements ActionListener{
 
         }
     }
+
 
 
     //Jämför knappens index mot det korrekta svarets index i frågan
