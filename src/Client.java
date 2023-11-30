@@ -46,6 +46,7 @@ public class Client {
 
                 //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
                 if (tempObject instanceof List<?>){
+
                     tempList.add(((List<?>) tempObject).get(0));
                     tempList.add(((List<?>) tempObject).get(1));
 
@@ -62,6 +63,7 @@ public class Client {
                         g.drawCategoryScreen(cat1,cat2);
                     } else System.out.println("Tom lista, nåt är fel");
 
+                    Thread.sleep(1000);
 
                     //System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
@@ -69,6 +71,7 @@ public class Client {
   
                 //Om objektet vi tagit emot från servern är en Question, följ nedan kodblock
                 } else if (tempObject instanceof Question) {
+                    Thread.sleep(1000);
                     tempQ = (Question) tempObject;
                     System.out.println("Client fick fråga: " + tempQ.getQuestion());
                     g.drawQuestionsScreen(tempQ);
@@ -86,6 +89,7 @@ public class Client {
                     g.drawEndScreen();
                 }
                 else if (tempObject instanceof Integer) {
+                    Thread.sleep(1000);
                     int tempInt = (Integer) tempObject;
                     if(tempInt == 4){
                         g.drawResultScreen(scoreList);
@@ -103,6 +107,8 @@ public class Client {
             e.printStackTrace();
         } catch (IOException e){
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 

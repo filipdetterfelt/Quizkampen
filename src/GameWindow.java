@@ -267,7 +267,7 @@ public class GameWindow extends JFrame implements ActionListener{
         if (e.getSource() == answer1Btn){
             System.out.println("Click registered for answerbtn1");
             if (checkAnswer(0,c.tempQ.getCorrectOptionIndex(),answer1Btn)){
-                try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                try {out.writeObject(1); } catch (IOException ex) {throw new RuntimeException(ex);}
             } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
         } else if (e.getSource() == answer2Btn){
             System.out.println("Click registered for answer2Btn");
@@ -306,25 +306,17 @@ public class GameWindow extends JFrame implements ActionListener{
            restartGame("Användarnamn: ");
 
         }
-
     }
 
-    //Thread.sleep "pausar" GUI så knappen hinner aldrig lysa grönt.
-    public void shortSleep(){
-        try{
-            Thread.sleep(1000);
-        } catch (InterruptedException ex){
-            throw new RuntimeException(ex);
-        }
-    }
 
     //Jämför knappens index mot det korrekta svarets index i frågan
     public boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
+
         if (answeredIndex == correctIndex){
             button.setBackground(Color.GREEN);
-            shortSleep();
             return true;
         } else {
+            button.setBackground(Color.red);
             return false;
         }
     }
