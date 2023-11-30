@@ -3,6 +3,7 @@ import QuestionManager.QuestionDatabase;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Server extends Thread{
@@ -12,11 +13,14 @@ public class Server extends Thread{
     ClientHandler currentPlayer;
     QuestionManager qm = new QuestionManager();
     List<String> listOfCategories = this.getListOfCategories();
+    List<ClientHandler> players = new ArrayList<>();
 
     public Server(ClientHandler p1, ClientHandler p2) {
         this.p1 = p1;
         this.p2 = p2;
         this.currentPlayer = p1;
+        players.add(0,p1);
+        players.add(1,p2);
         System.out.println("Game has started!");
         System.out.println(p1.getClientUsername() + " VS " + p2.getClientUsername());
     }
@@ -120,6 +124,8 @@ public class Server extends Thread{
 
     public void endGame() throws IOException {
         Boolean b = true;
+        p1.getOutputStream().writeObject(players);
+        p2.getOutputStream().writeObject(players);
         this.p1.getOutputStream().writeObject(b);
         this.p2.getOutputStream().writeObject(b);
     }

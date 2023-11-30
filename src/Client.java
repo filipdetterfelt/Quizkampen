@@ -16,6 +16,8 @@ public class Client {
     String username;
     ObjectOutputStream out;
     ObjectInputStream in;
+    ClientHandler player;
+    ClientHandler opponent;
     Question tempQ;
     int score;
     boolean isFinnished = false;
@@ -54,7 +56,7 @@ public class Client {
 
                 //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
                 if (tempObject instanceof List<?>){
-
+                    Thread.sleep(1000);
                     tempList.set(0,((List<?>) tempObject).get(0));
                     tempList.set(1,((List<?>) tempObject).get(1));
 
@@ -70,9 +72,12 @@ public class Client {
                         cat1 = (String) tempList.get(0);
                         cat2 = (String) tempList.get(1);
                         g.drawCategoryScreen(cat1,cat2);
-                    } else System.out.println("Tom lista, nåt är fel");
+                    } else if (isListOfPlayers(tempList)){
+                        player = (ClientHandler) tempList.get(0);
+                        opponent = (ClientHandler) tempList.get(1);
+                    }
 
-                    Thread.sleep(1000);
+
 
                     //System.out.println("Tog emot lista med kategorier");
                     //Ritar upp kategorifönstret med de mottagna kategorierna som inparametrar
@@ -95,7 +100,7 @@ public class Client {
                 else if (tempObject instanceof Boolean){
                     System.out.println("Drawing endScreen");
 
-                    g.drawEndScreen();
+                    g.drawEndScreen(player,opponent);
                 }
                 else if (tempObject instanceof Integer) {
                     Thread.sleep(1000);
@@ -126,6 +131,9 @@ public class Client {
     }
     public boolean isListOfInteger(List<Object> list){
         return list.stream().anyMatch(type -> type instanceof Integer);
+    }
+    public boolean isListOfPlayers(List<Object> list) {
+        return list.stream().anyMatch(type -> type instanceof ClientHandler);
     }
 
     public Socket getSocket() {
