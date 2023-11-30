@@ -64,8 +64,6 @@ public class Server extends Thread{
                     objectCounter = 0;
 
                     while ((fromPLayer = p2.getInputStream().readObject()) != null) {
-
-                        System.out.println("Fromplayer: " + fromPLayer);
                         if (fromPLayer instanceof Boolean) {
                             System.out.println("försöker skriva bool");
                             p2.getOutputStream().writeObject(fromPLayer);
