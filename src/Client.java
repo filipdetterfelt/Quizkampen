@@ -21,7 +21,7 @@ public class Client {
     Question tempQ;
     int score;
     boolean isFinnished = false;
-    private static int PORT = 55555;
+    private static int PORT = 55556;
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
         this.socket = socket;
@@ -57,8 +57,9 @@ public class Client {
                 //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
                 if (tempObject instanceof List<?>){
                     Thread.sleep(1000);
+
                     tempList.set(0,((List<?>) tempObject).get(0));
-                    tempList.set(1,((List<?>) tempObject).get(1));
+
 
                     if (isListOfInteger(tempList)) {
                         System.out.println("Fick en lista med int");
@@ -101,6 +102,7 @@ public class Client {
                     System.out.println("Drawing endScreen");
 
                     g.drawEndScreen(player,opponent);
+
                 }
                 else if (tempObject instanceof Integer) {
                     Thread.sleep(1000);

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.UIManager;
 
 
 public class GameWindow extends JFrame implements ActionListener{
@@ -68,8 +69,12 @@ public class GameWindow extends JFrame implements ActionListener{
     Client c = new Client();
 
 
+
+
+
     ObjectOutputStream out;
     public GameWindow (ObjectOutputStream o, Client c){
+
         this.out = o;
         this.c = c;
         answer1Btn.addActionListener(this);
@@ -81,6 +86,18 @@ public class GameWindow extends JFrame implements ActionListener{
         userName = new JLabel(c.username + " ");
         exitGame.addActionListener(this);
         playAgain.addActionListener(this);
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                 UnsupportedLookAndFeelException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        answer1Btn.setOpaque(true);
+        answer2Btn.setOpaque(true);
+        answer3Btn.setOpaque(true);
+        answer4Btn.setOpaque(true);
     }
 
     public void drawStartScreen(String username){
@@ -90,6 +107,7 @@ public class GameWindow extends JFrame implements ActionListener{
         startScreenPanel.add(waitingForOpponentLabel);
 
         setTitle("Quizkampen: ");
+        startScreenPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -119,6 +137,8 @@ public class GameWindow extends JFrame implements ActionListener{
         categoryScreenPanel.setBorder(BorderFactory.createEmptyBorder(40,20,20,20));
 
         setTitle("Quizkampen");
+        categoryScreenPanel.setBackground(Color.CYAN);
+        categoryCenteringPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -160,6 +180,10 @@ public class GameWindow extends JFrame implements ActionListener{
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 40, 20));
         questionsScreenPanel.setBorder(BorderFactory.createEmptyBorder(0,20,20,20));
         setTitle("Quizkampen");
+        questionsScreenPanel.setBackground(Color.CYAN);
+        topPanel.setBackground(Color.CYAN);
+        questionCenteringPanel.setBackground(Color.CYAN);
+        questionsPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -189,6 +213,15 @@ public class GameWindow extends JFrame implements ActionListener{
         revalidate();
         repaint();
         setTitle("Quizkampen");
+        waitingForOpponentPanel.setBackground(Color.CYAN);
+        topPanel.setBackground(Color.CYAN);
+        waitingPanel.setBackground(Color.CYAN);
+        playerScorePanel.setBackground(Color.CYAN);
+        opponentCenterPanel.setBackground(Color.CYAN);
+        opponentScorePanel.setBackground(Color.CYAN);
+        playerScorePanel.setBackground(Color.CYAN);
+        scorePanel.setBackground(Color.CYAN);
+        playerCenterPanel.setBackground(Color.CYAN);
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -315,6 +348,7 @@ public class GameWindow extends JFrame implements ActionListener{
     }
 
 
+
     //Jämför knappens index mot det korrekta svarets index i frågan
     public boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
 
@@ -328,10 +362,10 @@ public class GameWindow extends JFrame implements ActionListener{
     }
 
     public void resetBackgrounds(){
-        answer1Btn.setBackground(Color.GRAY);
-        answer2Btn.setBackground(Color.GRAY);
-        answer3Btn.setBackground(Color.GRAY);
-        answer4Btn.setBackground(Color.GRAY);
+        answer1Btn.setBackground(Color.WHITE);
+        answer2Btn.setBackground(Color.WHITE);
+        answer3Btn.setBackground(Color.WHITE);
+        answer4Btn.setBackground(Color.WHITE);
     }
     private void clearFrame(JPanel panel){
         this.remove(panel);
