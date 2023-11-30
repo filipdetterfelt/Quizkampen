@@ -315,9 +315,10 @@ public class GameWindow extends JFrame implements ActionListener{
 
     //Jämför knappens index mot det korrekta svarets index i frågan
     public boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
+        shortSleep();
         if (answeredIndex == correctIndex){
             button.setBackground(Color.GREEN);
-            shortSleep();
+
             return true;
         } else {
             return false;
