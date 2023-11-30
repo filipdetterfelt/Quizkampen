@@ -18,6 +18,7 @@ public class Client {
     ObjectInputStream in;
     Question tempQ;
     private static int PORT = 55556;
+    boolean isFinnished = false;
 
 
     public Client(Socket socket, String username) throws ClassNotFoundException, IOException {
@@ -62,12 +63,16 @@ public class Client {
                     answeredQuestions++;
                     System.out.println("answeredQuestion = "+answeredQuestions);
 
-                    //Om antal besvarade frågor är 4 så ritas endScreen ut
-                    if(answeredQuestions ==4){
-                        System.out.println("answeredquestions i if satsen = "+answeredQuestions);
-                        g.drawEndScreen();
-                    }
-                } else if (tempObject instanceof Integer) {
+                    //Om antal besvarade frågor är rätt antal så ritas endScreen ut
+
+
+                }
+                else if (tempObject instanceof Boolean){
+                    System.out.println("Drawing endScreen");
+
+                    g.drawEndScreen();
+                }
+                else if (tempObject instanceof Integer) {
                     int tempInt = (Integer) tempObject;
                     if(tempInt == 3){
                         g.drawWaitingForOpponentScreen(tempInt);

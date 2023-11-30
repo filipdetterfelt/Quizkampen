@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -204,6 +205,9 @@ public class GameWindow extends JFrame implements ActionListener{
 
     public void drawEndScreen() {
         clearFrame(scorePanel);
+        clearFrame(questionsPanel);
+        clearFrame(waitingForOpponentPanel);
+
         setLayout(new BorderLayout());
         add(endScreen);
 
@@ -228,13 +232,18 @@ public class GameWindow extends JFrame implements ActionListener{
         setVisible(true);
         setResizable(false);
     }
-    public void restartGame(String username){
+    public void restartGame(String username) {
         clearFrame(endScreen);
         clearFrame(categoryScreenPanel);
         clearFrame(questionsScreenPanel);
         clearFrame(scorePanel);
         clearFrame(waitingForOpponentPanel);
         clearFrame(startScreenPanel);
+
+        ServerListener sl = new ServerListener();
+        Client c = new Client();
+
+
 
         drawStartScreen(username);
     }
