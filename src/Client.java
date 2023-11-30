@@ -35,25 +35,34 @@ public class Client {
 
             Object tempObject;
             String tempString;
-            List<Object> tempList = new ArrayList<>();
+            List<Object> tempList = new ArrayList<>(2);
             List<Integer> scoreList = new ArrayList<>();
             String cat1 = null, cat2 = null;
             int answeredQuestions = 0;
+            scoreList.add(0,0);
+            scoreList.add(1,0);
+            tempList.add(0,0);
+            tempList.add(0,0);
+
 
 
             while ((tempObject = in.readObject()) != null) {
                 System.out.println("Klient mottagit object: " + tempObject);
+                System.out.println("Templist: " + tempList);
+                System.out.println("Scorelist = " + scoreList);
+
 
                 //Om objektet vi tagit emot från servern är en List<>, följ nedan kodblock
                 if (tempObject instanceof List<?>){
 
-                    tempList.add(((List<?>) tempObject).get(0));
-                    tempList.add(((List<?>) tempObject).get(1));
+                    tempList.set(0,((List<?>) tempObject).get(0));
+                    tempList.set(1,((List<?>) tempObject).get(1));
 
                     if (isListOfInteger(tempList)) {
                         System.out.println("Fick en lista med int");
-                        scoreList.add((Integer) ((List<?>) tempObject).get(0));
-                        scoreList.add((Integer) ((List<?>) tempObject).get(1));
+                        scoreList.set(0,(Integer) ((List<?>) tempObject).get(0));
+                        scoreList.set(1,(Integer) ((List<?>) tempObject).get(1));
+                        System.out.println("Score list: " + scoreList);
                         g.drawWaitingForOpponentScreen(scoreList);
                         out.writeObject("testString");
                     } else if (isListOfString(tempList)){
