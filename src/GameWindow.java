@@ -18,14 +18,15 @@ public class GameWindow extends JFrame implements ActionListener{
     JLabel waitingForOpponentLabel = new JLabel("Väntar på att en motståndare ska koppla upp sig...");
 
     //categoryScreen
-    JPanel categoryScreenPanel = new JPanel(new GridLayout(3,1,10,10));
+    JPanel categoryScreenPanel = new JPanel(new GridLayout(4,1,10,10));
     JPanel categoryCenteringPanel = new JPanel(new GridBagLayout());
     JLabel categoryLabel = new JLabel("Välj en kategori");
     JButton category1Btn = new JButton("Kategori 1");
     JButton category2Btn = new JButton("Kategori 1");
 
+    JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     //questionsScreen
-    JPanel questionsScreenPanel = new JPanel(new GridLayout(2,1,10,10));
+    JPanel questionsScreenPanel = new JPanel(new GridLayout(3,1,10,10));
     JPanel questionCenteringPanel = new JPanel(new GridBagLayout());
     JPanel questionsPanel = new JPanel(new GridLayout(2,2,10,10));
     JLabel questionLabel = new JLabel("Frågan visas här");
@@ -35,7 +36,7 @@ public class GameWindow extends JFrame implements ActionListener{
     JButton answer4Btn = new JButton("Svar 4");
 
     //waitingForOpponentScreen
-    JPanel waitingForOpponentPanel = new JPanel(new GridLayout(2,1,10,10));
+    JPanel waitingForOpponentPanel = new JPanel(new GridLayout(3,1,10,10));
     JPanel waitingPanel = new JPanel(new GridBagLayout());
     JLabel waitingForOpponentAnswerLabel = new JLabel("Väntar på att motståndaren ska spela..");
 
@@ -60,8 +61,10 @@ public class GameWindow extends JFrame implements ActionListener{
     JLabel exit = new JLabel("Spelet är avslutat");
 
     String userInput = null;
-
+    JLabel userName;
     Client c = new Client();
+
+
     ObjectOutputStream out;
     public GameWindow (ObjectOutputStream o, Client c){
         this.out = o;
@@ -72,10 +75,9 @@ public class GameWindow extends JFrame implements ActionListener{
         answer4Btn.addActionListener(this);
         category1Btn.addActionListener(this);
         category2Btn.addActionListener(this);
+        userName = new JLabel(c.username + " ");
         exitGame.addActionListener(this);
         playAgain.addActionListener(this);
-
-
     }
 
     public void drawStartScreen(String username){
@@ -93,11 +95,12 @@ public class GameWindow extends JFrame implements ActionListener{
     }
 
     public void drawCategoryScreen(String category1, String category2){
+
         clearFrame(startScreenPanel);
         clearFrame(questionsScreenPanel);
-
         add(categoryScreenPanel);
         categoryScreenPanel.add(categoryCenteringPanel);
+        categoryCenteringPanel.add(userName);
         categoryCenteringPanel.add(categoryLabel);
         categoryScreenPanel.add(category1Btn);
         categoryScreenPanel.add(category2Btn);
@@ -126,7 +129,10 @@ public class GameWindow extends JFrame implements ActionListener{
         clearFrame(startScreenPanel);
         clearFrame(waitingForOpponentPanel);
         resetBackgrounds();
+
         add(questionsScreenPanel);
+        questionsScreenPanel.add(topPanel);
+        topPanel.add(userName);
         questionsScreenPanel.add(questionCenteringPanel);
         questionCenteringPanel.add(questionLabel);
         questionsScreenPanel.add(questionsPanel);
@@ -148,7 +154,8 @@ public class GameWindow extends JFrame implements ActionListener{
         answer3Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(2));
         answer4Btn.setText(Arrays.asList(recievedQuestion.getOptions()).get(3));
 
-        questionsScreenPanel.setBorder(BorderFactory.createEmptyBorder(40,20,20,20));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 40, 20));
+        questionsScreenPanel.setBorder(BorderFactory.createEmptyBorder(0,20,20,20));
         setTitle("Quizkampen");
         setSize(400,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -160,6 +167,8 @@ public class GameWindow extends JFrame implements ActionListener{
         clearFrame(questionsScreenPanel);
 
         add(waitingForOpponentPanel);
+        waitingForOpponentPanel.add(topPanel);
+        topPanel.add(userName);
         waitingForOpponentPanel.add(scorePanel);
         waitingForOpponentPanel.add(waitingPanel);
         waitingPanel.add(waitingForOpponentAnswerLabel);
@@ -185,6 +194,7 @@ public class GameWindow extends JFrame implements ActionListener{
 
     public void drawResultScreen(int playerPoints, int opponentPoints){
         add(scorePanel);
+
         scorePanel.add(playerCenterPanel);
         playerCenterPanel.add(playerScorePanel);
         playerScorePanel.add(playerLabel);
@@ -257,17 +267,17 @@ public class GameWindow extends JFrame implements ActionListener{
         } else if (e.getSource() == answer2Btn){
             System.out.println("Click registered for answer2Btn");
             if (checkAnswer(1,c.tempQ.getCorrectOptionIndex(),answer2Btn)){
-                try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                try {out.writeObject(1); } catch (IOException ex) {throw new RuntimeException(ex);}
             } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
         } else if (e.getSource() == answer3Btn){
             System.out.println("Click registered for answer3Btn");
             if (checkAnswer(2,c.tempQ.getCorrectOptionIndex(),answer3Btn)){
-                try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                try {out.writeObject(1); } catch (IOException ex) {throw new RuntimeException(ex);}
             } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
         } else if (e.getSource() == answer4Btn){
             System.out.println("Click registered for answer4Btn");
             if (checkAnswer(3,c.tempQ.getCorrectOptionIndex(),answer4Btn)){
-                try {out.writeObject(1);} catch (IOException ex) {throw new RuntimeException(ex);}
+                try {out.writeObject(1); } catch (IOException ex) {throw new RuntimeException(ex);}
             } else {try {out.writeObject(0);} catch (IOException ex) {throw new RuntimeException(ex);}}
         } else if(e.getSource() == category1Btn){
             System.out.println("Click registered for category1Btn");
@@ -294,17 +304,20 @@ public class GameWindow extends JFrame implements ActionListener{
 
     }
 
+    //Thread.sleep "pausar" GUI så knappen hinner aldrig lysa grönt.
     public void shortSleep(){
         try{
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException ex){
             throw new RuntimeException(ex);
         }
     }
+
     //Jämför knappens index mot det korrekta svarets index i frågan
     public boolean checkAnswer(int answeredIndex, int correctIndex, JButton button){
         if (answeredIndex == correctIndex){
             button.setBackground(Color.GREEN);
+            shortSleep();
             return true;
         } else {
             return false;
