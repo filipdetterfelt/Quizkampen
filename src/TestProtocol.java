@@ -110,6 +110,7 @@ public class TestProtocol {
                  */
                 if (inObj instanceof Integer) {
                     if (questions == inputQuestions) {
+                        rounds++;
                  /*
                     Är questions == inputQuestions, så har klient 1 nu svarat på sina frågor, och vi vill då sätta
                     currentPlayer hos servern till klient 2. Sedan returnerar vi en 3'a, så klienten ritar upp sin
@@ -166,6 +167,7 @@ public class TestProtocol {
                             System.out.println("FEL");
                             System.out.println("P1 SCORE: " + p1.getScore());
                         }
+                        processedObject = questionsForThisGame.get(questions);
                         questions++;
                     }
                 } else if (inObj instanceof String) {
@@ -267,7 +269,6 @@ public class TestProtocol {
             case GAME_END -> {
                 gameEnd = true;
                 processedObject = gameEnd;
-
 
             }
         }
