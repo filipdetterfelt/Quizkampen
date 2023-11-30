@@ -86,10 +86,12 @@ public class Client {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your username: ");
-        String username = scanner.nextLine();
+        String userName = null;
+        while (userName == null || userName.trim().isEmpty()){
+            userName = JOptionPane.showInputDialog(null, "Vad heter du?");
+        }
+
         Socket socket = new Socket("localhost", PORT);
-        Client client = new Client(socket,username);
+        Client client = new Client(socket,userName);
     }
 }
