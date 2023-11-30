@@ -1,6 +1,7 @@
 import QuestionManager.QuestionManager;
 import QuestionManager.QuestionDatabase;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
@@ -115,5 +116,11 @@ public class Server extends Thread{
 
         System.out.println("Server - getListOfCategories() -> called the qm.getCategories() and received " + this.listOfCategories.size() + " categories");
         return listOfCategories;
+    }
+
+    public void endGame() throws IOException {
+        Boolean b = true;
+        this.p1.getOutputStream().writeObject(b);
+        this.p2.getOutputStream().writeObject(b);
     }
 }

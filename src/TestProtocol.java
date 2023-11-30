@@ -60,7 +60,7 @@ public class TestProtocol {
     }
 
 
-    public Object process(Object inObj) {
+    public Object process(Object inObj) throws IOException {
 
         Object processedObject = null;
         System.out.println(server.getCurrentPlayer().getClientUsername());
@@ -81,9 +81,6 @@ public class TestProtocol {
                     processedObject = tempCategoryList;
                     state = PLAYER_ONE_CHOOSE_CATEGORY;
                 }
-
-
-
 
             }
 
@@ -285,6 +282,8 @@ public class TestProtocol {
             case GAME_END -> {
                 gameEnd = true;
                 processedObject = scoreBoard;
+                processedObject = gameEnd;
+                server.endGame();
 
             }
         }
