@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -49,6 +50,15 @@ public class GameWindow extends JFrame implements ActionListener{
     JLabel opponentLabel = new JLabel("Motståndarens poäng:");
     JLabel opponentScoreLabel = new JLabel("0");
 
+    //Endscreen
+    JPanel endScreen = new JPanel();
+    JPanel northPanel = new JPanel();
+    JPanel centerPanel = new JPanel();
+    JPanel southPanel = new JPanel();
+    JButton playAgain = new JButton("Spela igen   ");
+    JButton exitGame = new JButton("Avsluta spelet");
+    JLabel exit = new JLabel("Spelet är avslutat");
+
     String userInput = null;
 
     Client c = new Client();
@@ -62,6 +72,9 @@ public class GameWindow extends JFrame implements ActionListener{
         answer4Btn.addActionListener(this);
         category1Btn.addActionListener(this);
         category2Btn.addActionListener(this);
+        exitGame.addActionListener(this);
+        playAgain.addActionListener(this);
+
 
     }
 
@@ -189,6 +202,51 @@ public class GameWindow extends JFrame implements ActionListener{
         setVisible(true);
         setResizable(false);
     }
+
+    public void drawEndScreen() {
+        clearFrame(scorePanel);
+        clearFrame(questionsPanel);
+        clearFrame(waitingForOpponentPanel);
+
+        setLayout(new BorderLayout());
+        add(endScreen);
+
+        endScreen.setLayout(new BorderLayout());
+        endScreen.add(centerPanel, BorderLayout.CENTER);
+        endScreen.add(northPanel, BorderLayout.NORTH);
+        endScreen.add(southPanel, BorderLayout.SOUTH);
+        southPanel.add(playAgain);
+        southPanel.add(exitGame);
+        centerPanel.add(exit);
+
+        centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,200));
+        exit.setFont(new Font("Arial",Font.BOLD,40));
+        centerPanel.add(exit);
+
+        revalidate();
+        repaint();
+        setTitle("Quizkampen");
+        centerPanel.setBackground(Color.CYAN);
+        setSize(400,600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+        setResizable(false);
+    }
+    public void restartGame(String username) {
+        clearFrame(endScreen);
+        clearFrame(categoryScreenPanel);
+        clearFrame(questionsScreenPanel);
+        clearFrame(scorePanel);
+        clearFrame(waitingForOpponentPanel);
+        clearFrame(startScreenPanel);
+
+        ServerListener sl = new ServerListener();
+        Client c = new Client();
+
+
+
+        drawStartScreen(username);
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == answer1Btn){
@@ -221,6 +279,17 @@ public class GameWindow extends JFrame implements ActionListener{
             String temp = category2Btn.getText();
             System.out.println("Vald kategori: " + temp);
             try {out.writeObject(temp);} catch (IOException ex) {throw new RuntimeException(ex);}
+        }
+        else if (e.getSource() ==exitGame){
+            System.out.println("Spelet avslutas");
+            System.exit(0);
+        }
+        else if (e.getSource() == playAgain){
+
+            System.out.println("Spelar igen");
+
+           restartGame("Användarnamn: ");
+
         }
 
     }

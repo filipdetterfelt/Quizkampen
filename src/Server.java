@@ -39,8 +39,13 @@ public class Server extends Thread{
 
                     while ((fromPLayer = p1.getInputStream().readObject()) != null) {
                         if (fromPLayer instanceof Boolean) {
-                            p2.getOutputStream().writeObject(4);
-                            p1.getOutputStream().writeObject(4);
+                            System.out.println("försöker skriva bool");
+                            p2.getOutputStream().writeObject(fromPLayer);
+                            System.out.println("p2 bool ");
+
+                            p1.getOutputStream().writeObject(fromPLayer);
+                            System.out.println("p1 bool ");
+
                             break;
                         }
                         objectCounter++;
@@ -61,9 +66,13 @@ public class Server extends Thread{
                     while ((fromPLayer = p2.getInputStream().readObject()) != null) {
 
                        //System.out.println("Fromplayer: " + fromPLayer);
+
                         if (fromPLayer instanceof Boolean) {
-                            p2.getOutputStream().writeObject(4);
-                            p1.getOutputStream().writeObject(4);
+                            System.out.println("försöker skriva bool");
+                            p2.getOutputStream().writeObject(fromPLayer);
+                            System.out.println("p2 bool ");
+                            p1.getOutputStream().writeObject(fromPLayer);
+                            System.out.println("p1 bool");
                             break;
                         }
                         objectCounter++;
@@ -76,6 +85,7 @@ public class Server extends Thread{
                         }
                         //System.out.println("Sending new object to process: " + fromPLayer);
                         p2.getOutputStream().writeObject(tp.process(fromPLayer));
+
                     }
 
                     }
