@@ -134,7 +134,9 @@ public class TestProtocol {
                         // om alla kategorier är gjorda men vi är på ojämnt antal rundor går vi över till p2 som ska svara på p1:s frågor,
                         // annars går vi vidare till game end state
                         if (categories == inputCategories) {
+                            System.out.println("Första if");
                             if (rounds % 2 != 0) {
+                                System.out.println("Andra if");
                                 processedObject = 3;
                                 server.setCurrentPlayer(p2);
                                 questions = 0;
@@ -145,6 +147,7 @@ public class TestProtocol {
                         }
                         // om det är fler kategorier kvar och vi är på en udda kategori och runda går vi över till p2 som ska svara på frågorna från p1
                         if (categories < inputCategories && categories % 2 != 0 && rounds % 2 != 0) {
+                            System.out.println("Vi är här");
                             processedObject = scoreBoard;
                             server.setCurrentPlayer(p2);
                             questions = 0;
