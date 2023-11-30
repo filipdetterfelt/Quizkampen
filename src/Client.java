@@ -59,6 +59,7 @@ public class Client {
                     Thread.sleep(1000);
 
                     tempList.set(0,((List<?>) tempObject).get(0));
+                    tempList.set(1,((List<?>) tempObject).get(1));
 
 
                     if (isListOfInteger(tempList)) {
