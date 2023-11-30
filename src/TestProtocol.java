@@ -45,6 +45,7 @@ public class TestProtocol {
     ClientHandler p1;
     ClientHandler p2;
     List<Question> questionsForThisGame = new ArrayList<>();
+    ArrayList<Integer> scoreBoard = new ArrayList<>(2);
     int questions = 0;
     int categories = 0;
     boolean gameEnd = false;
@@ -78,6 +79,9 @@ public class TestProtocol {
                     processedObject = tempCategoryList;
                     state = PLAYER_ONE_CHOOSE_CATEGORY;
                 }
+
+                scoreBoard.add(0,0);
+                scoreBoard.add(1,0);
             }
 
             case PLAYER_ONE_CHOOSE_CATEGORY -> {
@@ -118,6 +122,7 @@ public class TestProtocol {
                  */
                 if ((Integer) inObj == 1){
                             p1.setScore(p1.getScore() +1 );
+                            scoreBoard.set(0,p1.getScore());
                             System.out.println("RÄTT");
                             System.out.println("P1 SCORE: " + p1.getScore());
                         } else if ((Integer) inObj == 0){
@@ -125,11 +130,13 @@ public class TestProtocol {
                             System.out.println("P1 SCORE: " + p1.getScore());
                         }
                         //System.out.println("questions == inputQuestions");
-                        processedObject = p1.getScore();
+                        processedObject = scoreBoard;
                         // om alla kategorier är gjorda men vi är på ojämnt antal rundor går vi över till p2 som ska svara på p1:s frågor,
                         // annars går vi vidare till game end state
                         if (categories == inputCategories) {
+                            System.out.println("Första if");
                             if (rounds % 2 != 0) {
+                                System.out.println("Andra if");
                                 processedObject = 3;
                                 server.setCurrentPlayer(p2);
                                 questions = 0;
@@ -140,7 +147,8 @@ public class TestProtocol {
                         }
                         // om det är fler kategorier kvar och vi är på en udda kategori och runda går vi över till p2 som ska svara på frågorna från p1
                         if (categories < inputCategories && categories % 2 != 0 && rounds % 2 != 0) {
-                            processedObject = 3;
+                            System.out.println("Vi är här");
+                            processedObject = scoreBoard;
                             server.setCurrentPlayer(p2);
                             questions = 0;
                             state = PLAYER_TWO_QUESTION;
@@ -161,6 +169,7 @@ public class TestProtocol {
 
                         if ((Integer) inObj == 1){
                             p1.setScore(p1.getScore() +1 );
+                            scoreBoard.set(0,p1.getScore());
                             System.out.println("RÄTT");
                             System.out.println("P1 SCORE: " + p1.getScore());
                         } else if ((Integer) inObj == 0){
@@ -213,6 +222,7 @@ public class TestProtocol {
                         rounds++;
                       if ((Integer) inObj == 1){
                             p2.setScore(p2.getScore() +1 );
+                            scoreBoard.set(1,p2.getScore());
                             System.out.println("RÄTT");
                             System.out.println("P2 SCORE: " + p2.getScore());
                         } else if ((Integer) inObj == 0){
@@ -224,7 +234,7 @@ public class TestProtocol {
                         // annars går vi vidare till game end state
                         if (categories == inputCategories) {
                             if (rounds % 2 != 0) {
-                              processedObject = p2.getScore();
+                                processedObject = scoreBoard;
                                 server.setCurrentPlayer(p1);
                                 questions = 0;
                                 state = PLAYER_ONE_QUESTION;
@@ -240,7 +250,7 @@ public class TestProtocol {
                         }
                         // om det är fler kategorier kvar och vi är på en jämn kategori och udda runda är det p1:s tur att välja kategori
                         if (categories < inputCategories && categories % 2 == 0 && rounds % 2 != 0) {
-                            processedObject = 3;
+                            processedObject = scoreBoard;
                             server.setCurrentPlayer(p1);
                             questions = 0;
                             state = PLAYER_ONE_QUESTION;
@@ -250,6 +260,7 @@ public class TestProtocol {
                     } else if (questions < inputQuestions) {
                         if ((Integer) inObj == 1){
                             p2.setScore(p2.getScore() +1 );
+                            scoreBoard.set(1,p2.getScore());
                             System.out.println("RÄTT");
                             System.out.println("P2 SCORE: " + p2.getScore());
                         } else if ((Integer) inObj == 0){
