@@ -408,8 +408,8 @@ public class GameWindow extends JFrame implements ActionListener {
             System.out.println("Spelet avslutas");
             System.exit(0);
 
+        }
     }
-
 
     /*
      * Method to check the selected answer against the correct answer and update button colors accordingly.
